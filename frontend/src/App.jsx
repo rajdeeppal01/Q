@@ -1,41 +1,7 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
 
-function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--bg-void)',
-      }}>
-        <div style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '1.25rem',
-          fontWeight: 700,
-          background: 'linear-gradient(135deg, var(--accent), #A855F7)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}>
-          Q
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return children;
-}
 
 function AppLayout() {
   return (
@@ -80,19 +46,9 @@ function Placeholder({ title }) {
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </AuthProvider>
+      <Routes>
+        <Route path="/*" element={<AppLayout />} />
+      </Routes>
     </BrowserRouter>
   );
 }
