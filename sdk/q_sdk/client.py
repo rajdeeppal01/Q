@@ -150,7 +150,8 @@ class QAgent:
 
         # Evaluate Policy Cache locally
         class _PseudoEvent:
-            tool_name = tool_name
+            pass
+        _PseudoEvent.tool_name = tool_name
             
         policy_result = self._policy_cache.evaluate(_PseudoEvent)
         if policy_result.action == "block":
@@ -209,7 +210,8 @@ class QAgent:
 
         # Evaluate Policy Cache locally
         class _PseudoEvent:
-            tool_name = tool_name
+            pass
+        _PseudoEvent.tool_name = tool_name
             
         policy_result = self._policy_cache.evaluate(_PseudoEvent)
         if policy_result.action == "block":
