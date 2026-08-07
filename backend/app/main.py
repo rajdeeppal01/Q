@@ -16,7 +16,7 @@ import logging
 from app.config import settings
 from app.database import engine, Base
 from app.websocket.manager import manager
-from app.routes import auth, agents, events, alerts
+from app.routes import auth, agents, events, alerts, policies, approvals
 
 # Configure logging
 logging.basicConfig(
@@ -82,6 +82,8 @@ app.include_router(auth.router)
 app.include_router(agents.router)
 app.include_router(events.router)
 app.include_router(alerts.router)
+app.include_router(policies.router)
+app.include_router(approvals.router)
 
 
 # --- Health Check ---
