@@ -69,7 +69,7 @@ def register_agent(
     owner = db.execute(select(User)).scalars().first()
     if not owner:
         # Create a dummy user if none exists (just for quickstart demo purposes)
-        owner = User(email="admin@q-platform.internal", name="Q Admin", hashed_password="dummy")
+        owner = User(email="admin@q-platform.internal", name="Q Admin", password_hash="dummy")
         db.add(owner)
         db.commit()
         db.refresh(owner)
