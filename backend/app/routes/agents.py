@@ -9,6 +9,7 @@ from sqlalchemy import select
 from typing import List, Optional
 import uuid
 import secrets
+import hashlib
 from datetime import datetime, timezone
 
 from app.database import get_db
@@ -88,10 +89,12 @@ def register_agent(
     # 2. Generate an API Key (Agent Identity)
     raw_api_key = f"q_sk_{secrets.token_urlsafe(32)}"
     
+    api_key_hash_val = hashlib.sha256(raw_api_key.encode()).hexdigest()
+    
     identity = AgentIdentity(
         agent_id=new_agent.id,
-        hashed_api_key=AgentIdentity.hash_api_key(raw_api_key),
-        description="Auto-generated on registration",
+        api_key_hash=api_key_hash_val,
+        api_key_prefix=raw_api_key[:12],
     )
     db.add(identity)
     db.commit()
@@ -168,10 +171,11 @@ def rotate_agent_key(
 
     # Generate new key
     raw_api_key = f"q_sk_{secrets.token_urlsafe(32)}"
+    api_key_hash_val = hashlib.sha256(raw_api_key.encode()).hexdigest()
     new_identity = AgentIdentity(
         agent_id=agent.id,
-        hashed_api_key=AgentIdentity.hash_api_key(raw_api_key),
-        description="Rotated key",
+        api_key_hash=api_key_hash_val,
+        api_key_prefix=raw_api_key[:12],
     )
     db.add(new_identity)
     db.commit()
