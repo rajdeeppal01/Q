@@ -16,7 +16,7 @@ import logging
 from app.config import settings
 from app.database import engine, Base
 from app.websocket.manager import manager
-from app.routes import auth
+from app.routes import auth, agents
 
 # Configure logging
 logging.basicConfig(
@@ -79,6 +79,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # --- Routes ---
 
 app.include_router(auth.router)
+app.include_router(agents.router)
 
 
 # --- Health Check ---
