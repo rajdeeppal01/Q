@@ -1,6 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   {
@@ -93,7 +92,6 @@ const navItems = [
 
 export default function Sidebar() {
   const location = useLocation();
-  const { user, logout } = useAuth();
 
   return (
     <nav className="sidebar">
@@ -166,31 +164,7 @@ export default function Sidebar() {
         })}
       </div>
 
-      {/* User */}
-      {user && (
-        <div style={{
-          padding: 'var(--space-md) var(--space-lg)',
-          borderTop: '1px solid var(--border-subtle)',
-        }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                {user.name}
-              </div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                {user.role}
-              </div>
-            </div>
-            <button
-              onClick={logout}
-              className="btn btn-ghost btn-sm"
-              style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      )}
+
     </nav>
   );
 }
