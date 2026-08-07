@@ -12,6 +12,7 @@ from typing import Optional, Dict, Any, Callable, List
 
 from q_sdk.telemetry import TelemetryClient
 from q_sdk.models import TelemetryEvent, EventType, RiskLevel, ApprovalRequestPayload
+from q_sdk.policy import PolicyCache, PolicyResult
 
 logger = logging.getLogger("q_sdk")
 
@@ -61,6 +62,7 @@ class QAgent:
         self.agent_id: Optional[str] = None
         self._tools: Dict[str, Dict[str, Any]] = {}
         self._telemetry = TelemetryClient(q_url, api_key)
+        self._policy_cache = PolicyCache()
         self._trace_id: Optional[str] = None
 
         # Auto-register with Q
@@ -146,6 +148,17 @@ class QAgent:
         start_time = time.time()
         span_id = str(uuid.uuid4())
 
+        # Evaluate Policy Cache locally
+        class _PseudoEvent:
+            tool_name = tool_name
+            
+        policy_result = self._policy_cache.evaluate(_PseudoEvent)
+        if policy_result.action == "block":
+            raise PolicyViolationError(policy_result.reason)
+        elif policy_result.action == "require_approval":
+            require_approval = True
+            approval_reason = policy_result.reason
+
         # Serialize inputs safely
         input_data = self._safe_serialize({"args": args, "kwargs": kwargs})
 
@@ -193,6 +206,17 @@ class QAgent:
         start_time = time.time()
         span_id = str(uuid.uuid4())
         input_data = self._safe_serialize({"args": args, "kwargs": kwargs})
+
+        # Evaluate Policy Cache locally
+        class _PseudoEvent:
+            tool_name = tool_name
+            
+        policy_result = self._policy_cache.evaluate(_PseudoEvent)
+        if policy_result.action == "block":
+            raise PolicyViolationError(policy_result.reason)
+        elif policy_result.action == "require_approval":
+            require_approval = True
+            approval_reason = policy_result.reason
 
         # HITL Gate: request approval if required
         if require_approval and self.agent_id:

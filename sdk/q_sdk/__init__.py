@@ -20,6 +20,7 @@ Usage:
 
 from q_sdk.client import QAgent
 from q_sdk.decorators import tool, require_approval
+from q_sdk.interceptors import wrap_llm_call
 
 __version__ = "0.1.0"
-__all__ = ["QAgent", "tool", "require_approval"]
+__all__ = ["QAgent", "tool", "require_approval", "wrap_llm_call"]
