@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # Database
-    DATABASE_URL: str = "postgresql://localhost/q_dev"
+    DATABASE_URL: str = "postgresql://neondb_owner:npg_DU8jW0ErJNli@ep-polished-unit-axyqhvt0-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
     # Auth
     SECRET_KEY: str = "change-me-in-production-use-a-real-secret-key"
