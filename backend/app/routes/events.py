@@ -89,7 +89,7 @@ def process_event_background(event_data: dict, agent_id: str, db: Session):
                 "agent_id": agent_id,
                 "message": anomaly,
                 "severity": alert.severity
-            }, channel="global"))
+            }))
             
     except Exception as e:
         logger.error(f"Error in background event processing: {e}")
@@ -143,12 +143,12 @@ async def ingest_event(
     await manager.broadcast({
         "type": "event",
         "data": event_dict
-    }, channel="global")
+    })
     if event.agent_id:
-        await manager.broadcast({
+        await manager.send_to_agent_channel(event.agent_id, {
             "type": "event",
             "data": event_dict
-        }, channel=event.agent_id)
+        })
 
     # Trigger background anomaly analysis
     if event.agent_id:
