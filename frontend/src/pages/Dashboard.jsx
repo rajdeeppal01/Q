@@ -1,11 +1,7 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
-const stats = [
-  { label: 'Total Agents', value: '0', color: 'var(--accent)', icon: '🤖' },
-  { label: 'Active Agents', value: '0', color: 'var(--status-active)', icon: '⚡' },
-  { label: 'Open Alerts', value: '0', color: 'var(--risk-high)', icon: '🔔' },
-  { label: 'Pending Approvals', value: '0', color: 'var(--status-paused)', icon: '⏳' },
-];
+import { api } from '../api/client';
+import { WS_URL } from '../api/config';
 
 const container = {
   hidden: { opacity: 0 },
@@ -21,6 +17,48 @@ const item = {
 };
 
 export default function Dashboard() {
+  const [agents, setAgents] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [approvals, setApprovals] = useState([]);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    // Fetch initial data
+    Promise.all([
+      api.getAgents(),
+      api.getAlerts(),
+      api.getApprovals()
+    ]).then(([agentsData, alertsData, approvalsData]) => {
+      setAgents(agentsData);
+      setAlerts(alertsData.filter(a => a.status === 'open'));
+      setApprovals(approvalsData);
+    }).catch(console.error);
+
+    // Setup WebSocket for live telemetry
+    const ws = new WebSocket(`${WS_URL}/ws/monitor`);
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (msg.type === 'event') {
+          setEvents(prev => [msg.data, ...prev].slice(0, 10)); // Keep last 10
+        } else if (msg.type === 'alert') {
+          api.getAlerts().then(data => setAlerts(data.filter(a => a.status === 'open')));
+        } else if (msg.type === 'approval_request') {
+          api.getApprovals().then(setApprovals);
+        }
+      } catch (err) {}
+    };
+
+    return () => ws.close();
+  }, []);
+
+  const stats = [
+    { label: 'Total Agents', value: agents.length.toString(), color: 'var(--accent)', icon: '🤖' },
+    { label: 'Active Agents', value: agents.filter(a => a.status === 'active').length.toString(), color: 'var(--status-active)', icon: '⚡' },
+    { label: 'Open Alerts', value: alerts.length.toString(), color: 'var(--risk-high)', icon: '🔔' },
+    { label: 'Pending Approvals', value: approvals.length.toString(), color: 'var(--status-paused)', icon: '⏳' },
+  ];
+
   return (
     <div>
       {/* Header */}
@@ -79,18 +117,28 @@ export default function Dashboard() {
           <h3 style={{ marginBottom: 'var(--space-md)', fontWeight: 700 }}>
             📡 Live Event Feed
           </h3>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 200,
-            color: 'var(--text-muted)',
-            fontSize: '0.875rem',
-            borderRadius: 'var(--radius-md)',
-            border: '1px dashed var(--border-default)',
-          }}>
-            Waiting for agent telemetry...
-          </div>
+          {events.length === 0 ? (
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200,
+              color: 'var(--text-muted)', fontSize: '0.875rem', borderRadius: 'var(--radius-md)',
+              border: '1px dashed var(--border-default)'
+            }}>
+              Waiting for agent telemetry...
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+              {events.map((ev, i) => (
+                <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                  style={{
+                    padding: 'var(--space-sm)', background: 'var(--bg-deep)', borderRadius: 'var(--radius-sm)',
+                    fontSize: '0.8125rem', display: 'flex', justifyContent: 'space-between'
+                  }}>
+                  <span><strong style={{color: 'var(--accent)'}}>{ev.tool_name || ev.event_type}</strong></span>
+                  <span style={{color: ev.risk_level === 'high' ? 'var(--risk-high)' : 'var(--text-secondary)'}}>{ev.risk_level.toUpperCase()}</span>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </motion.div>
 
         {/* Compliance Overview */}
@@ -139,18 +187,27 @@ export default function Dashboard() {
         <h3 style={{ marginBottom: 'var(--space-md)', fontWeight: 700 }}>
           🚨 Recent Alerts
         </h3>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: 120,
-          color: 'var(--text-muted)',
-          fontSize: '0.875rem',
-          borderRadius: 'var(--radius-md)',
-          border: '1px dashed var(--border-default)',
-        }}>
-          No alerts — all agents operating within policy boundaries
-        </div>
+        {alerts.length === 0 ? (
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120,
+            color: 'var(--text-muted)', fontSize: '0.875rem', borderRadius: 'var(--radius-md)',
+            border: '1px dashed var(--border-default)',
+          }}>
+            No alerts — all agents operating within policy boundaries
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+            {alerts.slice(0, 3).map(alert => (
+              <div key={alert.id} style={{
+                padding: 'var(--space-md)', background: 'rgba(239, 68, 68, 0.1)', borderLeft: '4px solid var(--risk-high)',
+                borderRadius: 'var(--radius-sm)', fontSize: '0.875rem'
+              }}>
+                <div style={{fontWeight: 700, color: 'var(--risk-high)', marginBottom: '4px'}}>{alert.message}</div>
+                <div style={{color: 'var(--text-secondary)'}}>Agent: {alert.agent_id}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </motion.div>
     </div>
   );
