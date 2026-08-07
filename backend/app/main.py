@@ -17,6 +17,8 @@ from app.config import settings
 from app.database import engine, Base
 from app.websocket.manager import manager
 from app.routes import auth, agents, events, alerts, policies, approvals, audit
+from fastapi.responses import JSONResponse
+import traceback
 
 # Configure logging
 logging.basicConfig(
@@ -74,6 +76,15 @@ app.add_middleware(
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.error(f"Global exception: {exc}")
+    logger.error(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error", "error": str(exc), "traceback": traceback.format_exc()}
+    )
 
 
 # --- Routes ---
