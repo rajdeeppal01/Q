@@ -40,50 +40,54 @@ export const Auth = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-q-bg p-4 relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-q-glow/5 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/5 blur-[120px] pointer-events-none"></div>
+    <div className="auth-layout">
+      {/* Background glow effects - handled via inline styles for specific positioning without Tailwind */}
+      <div style={{
+        position: 'absolute', top: '-10%', left: '-10%', width: '50%', height: '50%', 
+        borderRadius: '50%', background: 'rgba(0, 229, 255, 0.05)', filter: 'blur(120px)', pointerEvents: 'none'
+      }}></div>
+      <div style={{
+        position: 'absolute', bottom: '-10%', right: '-10%', width: '50%', height: '50%', 
+        borderRadius: '50%', background: 'rgba(168, 85, 247, 0.05)', filter: 'blur(120px)', pointerEvents: 'none'
+      }}></div>
 
-      <div className="w-full max-w-md bg-q-panel border border-q-border rounded-2xl shadow-2xl relative z-10 animate-fade-in overflow-hidden">
-        <div className="p-8 text-center border-b border-q-border/50 bg-q-base/50">
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-q-glow to-purple-500 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(0,255,157,0.3)]">
-            <span className="text-3xl font-black text-black">Q</span>
+      <div className="auth-card animate-fade-in">
+        <div className="auth-header">
+          <div className="auth-logo">
+            <span>Q</span>
           </div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Agent Governance</h2>
-          <p className="text-q-muted mt-2 text-sm">Secure authorization required</p>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '4px' }}>Agent Governance</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Secure authorization required</p>
         </div>
 
-        <div className="p-8">
-          <div className="flex rounded-lg bg-q-base p-1 mb-8 border border-q-border">
-            <button
-              type="button"
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${isLogin ? 'bg-q-panel text-white shadow-sm border border-q-border' : 'text-q-muted hover:text-white'}`}
+        <div className="auth-body">
+          <div className="auth-tabs">
+            <div 
+              className={`auth-tab ${isLogin ? 'active' : ''}`}
               onClick={() => { setIsLogin(true); setError(null); }}
             >
               Sign In
-            </button>
-            <button
-              type="button"
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${!isLogin ? 'bg-q-panel text-white shadow-sm border border-q-border' : 'text-q-muted hover:text-white'}`}
+            </div>
+            <div 
+              className={`auth-tab ${!isLogin ? 'active' : ''}`}
               onClick={() => { setIsLogin(false); setError(null); }}
             >
               Create Account
-            </button>
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="auth-form">
             {!isLogin && (
-              <div>
-                <label className="block text-xs font-semibold text-q-muted uppercase tracking-wider mb-2">Full Name</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-q-muted">
+              <div className="auth-form-group">
+                <label className="auth-label">Full Name</label>
+                <div className="auth-input-wrapper">
+                  <div className="auth-input-icon">
                     <UserIcon size={18} />
                   </div>
                   <input
                     type="text"
                     required
-                    className="block w-full pl-10 pr-3 py-2.5 bg-q-base border border-q-border rounded-lg text-white placeholder-q-muted focus:outline-none focus:border-q-glow focus:ring-1 focus:ring-q-glow transition-all"
+                    className="auth-input"
                     placeholder="Jane Doe"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -92,16 +96,16 @@ export const Auth = ({ onLogin }) => {
               </div>
             )}
 
-            <div>
-              <label className="block text-xs font-semibold text-q-muted uppercase tracking-wider mb-2">Email Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-q-muted">
+            <div className="auth-form-group">
+              <label className="auth-label">Email Address</label>
+              <div className="auth-input-wrapper">
+                <div className="auth-input-icon">
                   <Mail size={18} />
                 </div>
                 <input
                   type="email"
                   required
-                  className="block w-full pl-10 pr-3 py-2.5 bg-q-base border border-q-border rounded-lg text-white placeholder-q-muted focus:outline-none focus:border-q-glow focus:ring-1 focus:ring-q-glow transition-all"
+                  className="auth-input"
                   placeholder="admin@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -109,16 +113,16 @@ export const Auth = ({ onLogin }) => {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-q-muted uppercase tracking-wider mb-2">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-q-muted">
+            <div className="auth-form-group">
+              <label className="auth-label">Password</label>
+              <div className="auth-input-wrapper">
+                <div className="auth-input-icon">
                   <Key size={18} />
                 </div>
                 <input
                   type="password"
                   required
-                  className="block w-full pl-10 pr-3 py-2.5 bg-q-base border border-q-border rounded-lg text-white placeholder-q-muted focus:outline-none focus:border-q-glow focus:ring-1 focus:ring-q-glow transition-all"
+                  className="auth-input"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -127,8 +131,8 @@ export const Auth = ({ onLogin }) => {
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-start gap-2">
-                <Shield size={16} className="mt-0.5 shrink-0" />
+              <div className="auth-error">
+                <Shield size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p>{error}</p>
               </div>
             )}
@@ -136,15 +140,15 @@ export const Auth = ({ onLogin }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-black bg-q-glow hover:bg-q-glow/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-q-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="auth-btn"
             >
               {isLoading ? (
-                <span className="flex items-center gap-2">
-                  <Lock size={16} className="animate-pulse" />
+                <span className="flex items-center gap-sm">
+                  <Lock size={16} style={{ animation: 'pulse-quarantine 2s infinite' }} />
                   Authenticating...
                 </span>
               ) : (
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-sm">
                   <Lock size={16} />
                   {isLogin ? 'Sign In to Mission Control' : 'Create Admin Account'}
                 </span>
