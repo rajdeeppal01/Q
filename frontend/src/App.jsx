@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
+import { Policies } from './pages/Policies';
 
 
 function AppLayout() {
@@ -11,9 +12,9 @@ function AppLayout() {
       <main className="main-content">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/policies" element={<Policies />} />
           <Route path="/agents" element={<Placeholder title="Agent Registry" />} />
           <Route path="/monitor" element={<Placeholder title="Live Monitor" />} />
-          <Route path="/policies" element={<Placeholder title="Policy Manager" />} />
           <Route path="/approvals" element={<Placeholder title="Approvals" />} />
           <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
           <Route path="/compliance" element={<Placeholder title="Compliance" />} />

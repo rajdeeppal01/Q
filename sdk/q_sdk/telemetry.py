@@ -115,6 +115,19 @@ class TelemetryClient:
         except Exception:
             return False
 
+    def fetch_policies(self, agent_id: str) -> list:
+        """Fetch all active policies for this agent."""
+        try:
+            response = self._client.get(f"/policies/active?agent_id={agent_id}")
+            if response.status_code == 200:
+                return response.json()
+            else:
+                logger.warning(f"Failed to fetch policies: {response.status_code}")
+                return []
+        except Exception as e:
+            logger.error(f"Policy fetch error: {e}")
+            return []
+
     async def close(self):
         """Clean up HTTP clients."""
         self._client.close()

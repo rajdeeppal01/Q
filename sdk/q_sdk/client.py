@@ -80,6 +80,12 @@ class QAgent:
         if result.get("id"):
             self.agent_id = result["id"]
             logger.info(f"✅ Agent '{self.name}' registered with Q (ID: {self.agent_id})")
+            
+            # Fetch active policies for this agent
+            policies = self._telemetry.fetch_policies(self.agent_id)
+            if policies:
+                self._policy_cache.update_policies(policies)
+                logger.info(f"🛡️  Loaded {len(policies)} governance policies from Q backend.")
         else:
             logger.warning(f"⚠️ Agent '{self.name}' registration failed — running without Q governance")
 

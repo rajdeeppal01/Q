@@ -44,7 +44,13 @@ export const api = {
   
   // Policies
   getPolicies: () => qFetch('/policies/'),
-  
+  createPolicy: (policyData) => qFetch('/policies/', {
+    method: 'POST',
+    body: JSON.stringify(policyData)
+  }),
+  deletePolicy: (id) => qFetch(`/policies/${id}`, {
+    method: 'DELETE'
+  }),
   // Compliance
   getAuditReport: (agentId) => qFetch(`/audit/report/${agentId}`)
 };
