@@ -53,14 +53,14 @@ export default function Landing() {
           <ThemeToggleButton variant="circle" start="top-right" blur={true} />
           <button 
             style={{ background: 'transparent', border: 'none', color: 'white', fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem' }}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/login')}
           >
             Log in
           </button>
           <button 
             className="btn btn-primary" 
             style={{ borderRadius: '20px', padding: '0.5rem 1.25rem', fontWeight: 600, color: 'var(--bg-void)', background: 'white' }}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/login')}
           >
             Get started
           </button>
