@@ -109,6 +109,45 @@
   --header-height: 64px;
 }
 
+/* --- Light Theme Variables --- */
+:root.light-theme {
+  /* Background layers */
+  --bg-void: #F8F9FA;
+  --bg-deep: #FFFFFF;
+  --bg-surface: #F1F3F5;
+  --bg-elevated: #E9ECEF;
+  --bg-card: #FFFFFF;
+  --bg-hover: #DEE2E6;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.1);
+
+  /* Text */
+  --text-primary: #1A1B1E;
+  --text-secondary: #495057;
+  --text-muted: #868E96;
+  --text-inverse: #FFFFFF;
+
+  /* Accent (Keep it cyan but adjust for contrast if needed, or use a slightly deeper blue) */
+  --accent: #00B8D4;
+  --accent-dim: #0097A7;
+  --accent-glow: rgba(0, 184, 212, 0.15);
+  --accent-glow-strong: rgba(0, 184, 212, 0.3);
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --border-default: rgba(0, 0, 0, 0.1);
+  --border-accent: rgba(0, 184, 212, 0.3);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 20px rgba(0, 184, 212, 0.15);
+  --shadow-glow-strong: 0 0 40px rgba(0, 184, 212, 0.25);
+}
+
 /* --- Base Styles --- */
 html {
   font-size: 16px;

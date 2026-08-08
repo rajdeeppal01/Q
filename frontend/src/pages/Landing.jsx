@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { ThemeToggleButton } from '../components/ThemeToggle';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ export default function Landing() {
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <ThemeToggleButton variant="circle" start="top-right" blur={true} />
           <button 
             style={{ background: 'transparent', border: 'none', color: 'white', fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem' }}
             onClick={() => navigate('/dashboard')}
