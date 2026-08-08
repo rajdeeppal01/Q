@@ -7,10 +7,11 @@ const qFetch = async (endpoint, options = {}) => {
     ...options.headers,
   };
   
-  // Dummy auth token to bypass the Depends(get_current_user) in FastAPI
-  // since we haven't wired up full JWT login on the frontend yet.
-  // The backend will mock this to the first admin user.
-  headers['Authorization'] = 'Bearer dummy_token_for_mvp';
+  // Get real token from localStorage
+  const token = localStorage.getItem('q_access_token');
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
@@ -24,6 +25,33 @@ const qFetch = async (endpoint, options = {}) => {
 };
 
 export const api = {
+  // Auth
+  login: async (username, password) => {
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
+    
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toString()
+    });
+    
+    if (!response.ok) {
+      throw new Error('Invalid credentials');
+    }
+    return response.json();
+  },
+  
+  register: (userData) => qFetch('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(userData)
+  }),
+  
+  getMe: () => qFetch('/auth/me'),
+
   // Agents
   getAgents: () => qFetch('/agents/'),
   getAgent: (id) => qFetch(`/agents/${id}`),

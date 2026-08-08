@@ -1,12 +1,15 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
 import { Policies } from './pages/Policies';
 import { Approvals } from './pages/Approvals';
+import { Auth } from './pages/Auth';
+import { api } from './api/client';
 
 
-function AppLayout() {
+function AppLayout({ onLogout }) {
   return (
     <div className="app-layout">
       <Sidebar />
@@ -47,11 +50,43 @@ function Placeholder({ title }) {
 }
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if we have a valid token on load
+    const verifyToken = async () => {
+      const token = localStorage.getItem('q_access_token');
+      if (token) {
+        try {
+          await api.getMe();
+          setIsAuthenticated(true);
+        } catch (err) {
+          localStorage.removeItem('q_access_token');
+          setIsAuthenticated(false);
+        }
+      }
+      setIsLoading(false);
+    };
+    verifyToken();
+  }, []);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-q-bg flex items-center justify-center text-q-glow animate-pulse">Loading Q Platform...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Auth onLogin={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/*" element={<AppLayout />} />
+        <Route path="/*" element={<AppLayout onLogout={() => {
+          localStorage.removeItem('q_access_token');
+          setIsAuthenticated(false);
+        }} />} />
       </Routes>
     </BrowserRouter>
   );
