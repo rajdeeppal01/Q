@@ -19,6 +19,8 @@ setup(
         "pydantic>=2.0.0",
     ],
     extras_require={
+        "langchain": ["langchain-core>=0.1.0"],
+        "autogen": ["pyautogen>=0.2.0"],
         "dev": ["pytest", "pytest-asyncio"],
     },
     classifiers=[
