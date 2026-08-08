@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const navItems = [
   {
     label: 'Mission Control',
-    path: '/',
+    path: '/dashboard',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -130,7 +130,7 @@ export default function Sidebar() {
       <div style={{ flex: 1, padding: 'var(--space-md)', display: 'flex', flexDirection: 'column', gap: '2px' }}>
         {navItems.map((item) => {
           const isActive = location.pathname === item.path ||
-            (item.path !== '/' && location.pathname.startsWith(item.path));
+            (item.path !== '/dashboard' && item.path !== '/' && location.pathname.startsWith(item.path));
 
           return (
             <NavLink

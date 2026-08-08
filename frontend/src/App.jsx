@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 
 
 function AppLayout() {
@@ -9,7 +10,7 @@ function AppLayout() {
       <Sidebar />
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agents" element={<Placeholder title="Agent Registry" />} />
           <Route path="/monitor" element={<Placeholder title="Live Monitor" />} />
           <Route path="/policies" element={<Placeholder title="Policy Manager" />} />
@@ -47,6 +48,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/*" element={<AppLayout />} />
       </Routes>
     </BrowserRouter>
