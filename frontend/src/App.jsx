@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
 import { Policies } from './pages/Policies';
+import { Approvals } from './pages/Approvals';
 
 
 function AppLayout() {
@@ -15,7 +16,7 @@ function AppLayout() {
           <Route path="/policies" element={<Policies />} />
           <Route path="/agents" element={<Placeholder title="Agent Registry" />} />
           <Route path="/monitor" element={<Placeholder title="Live Monitor" />} />
-          <Route path="/approvals" element={<Placeholder title="Approvals" />} />
+          <Route path="/approvals" element={<Approvals />} />
           <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
           <Route path="/compliance" element={<Placeholder title="Compliance" />} />
           <Route path="/alerts" element={<Placeholder title="Alerts" />} />

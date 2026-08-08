@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List, Optional, Any
+import asyncio
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel
 
@@ -22,18 +23,17 @@ router = APIRouter(prefix="/approvals", tags=["Approvals"])
 
 class ApprovalCreate(BaseModel):
     agent_id: str
-    tool_name: str
-    input_data: Optional[dict[str, Any]] = None
+    action_description: str
     reason: str
-    risk_level: str = "high"
+    context: dict[str, Any] = {}
+    timeout_seconds: int = 300
 
 class ApprovalResponse(BaseModel):
     id: str
     agent_id: str
-    tool_name: str
-    input_data: Optional[dict[str, Any]] = None
+    action_description: str
     reason: str
-    risk_level: str
+    context: dict[str, Any]
     status: str
     created_at: datetime
     
@@ -45,7 +45,10 @@ class ApprovalAction(BaseModel):
 
 # --- Endpoints ---
 
-@router.post("/request", response_model=ApprovalResponse)
+# In-memory store for pending requests so the /request endpoint can block
+pending_approvals_events = {}
+
+@router.post("/request")
 async def request_approval(
     req: ApprovalCreate,
     db: Session = Depends(get_db)
@@ -54,29 +57,48 @@ async def request_approval(
     # Note: In prod, auth the agent
     approval = ApprovalRequest(
         agent_id=req.agent_id,
-        tool_name=req.tool_name,
-        input_data=req.input_data,
+        action_description=req.action_description,
+        context=req.context,
         reason=req.reason,
-        risk_level=req.risk_level,
         status="pending",
-        expires_at=datetime.now(timezone.utc) + timedelta(minutes=15)
+        expires_at=datetime.now(timezone.utc) + timedelta(seconds=req.timeout_seconds)
     )
     db.add(approval)
     db.commit()
     db.refresh(approval)
     
+    # Setup the event for blocking
+    wait_event = asyncio.Event()
+    pending_approvals_events[approval.id] = wait_event
+
     # Broadcast to dashboard
     await manager.broadcast({
         "type": "approval_request",
         "data": {
             "id": approval.id,
             "agent_id": approval.agent_id,
-            "tool_name": approval.tool_name,
+            "action_description": approval.action_description,
             "reason": approval.reason
         }
     }, channel="global")
     
-    return approval
+    # Wait for the human to review or timeout
+    try:
+        await asyncio.wait_for(wait_event.wait(), timeout=req.timeout_seconds)
+    except asyncio.TimeoutError:
+        approval.status = "expired"
+        db.commit()
+    finally:
+        pending_approvals_events.pop(approval.id, None)
+        
+    db.refresh(approval)
+    
+    # Return the format the SDK expects
+    return {
+        "approved": approval.status == "approved",
+        "review_notes": approval.review_notes,
+        "reviewed_by": approval.reviewed_by
+    }
 
 @router.get("/{approval_id}/status")
 def get_approval_status(approval_id: str, db: Session = Depends(get_db)):
@@ -130,7 +152,11 @@ async def review_approval(
     approval.reviewed_at = datetime.now(timezone.utc)
     db.commit()
     
-    # Let the agent know immediately if it's connected via websocket
+    # Trigger the event to unblock the waiting /request endpoint
+    if approval.id in pending_approvals_events:
+        pending_approvals_events[approval.id].set()
+    
+    # Let the agent know immediately if it's connected via websocket (optional)
     await manager.broadcast({
         "type": "approval_result",
         "data": {
