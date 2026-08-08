@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
@@ -12,7 +12,7 @@ import { api } from './api/client';
 function AppLayout({ onLogout }) {
   return (
     <div className="app-layout">
-      <Sidebar />
+      <Sidebar onLogout={onLogout} />
       <main className="main-content">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -49,6 +49,15 @@ function Placeholder({ title }) {
   );
 }
 
+function ProtectedRoute({ isAuthenticated, children }) {
+  const location = useLocation();
+  if (!isAuthenticated) {
+    // Redirect to login but save the attempted url
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  return children;
+}
+
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,18 +84,33 @@ export default function App() {
     return <div className="min-h-screen bg-q-bg flex items-center justify-center text-q-glow animate-pulse">Loading Q Platform...</div>;
   }
 
-  if (!isAuthenticated) {
-    return <Auth onLogin={() => setIsAuthenticated(true)} />;
-  }
-
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Landing />} />
-        <Route path="/*" element={<AppLayout onLogout={() => {
-          localStorage.removeItem('q_access_token');
-          setIsAuthenticated(false);
-        }} />} />
+        
+        <Route 
+          path="/login" 
+          element={
+            isAuthenticated ? 
+            <Navigate to="/dashboard" replace /> : 
+            <Auth onLogin={() => setIsAuthenticated(true)} />
+          } 
+        />
+
+        {/* Protected Dashboard Routes */}
+        <Route 
+          path="/*" 
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <AppLayout onLogout={() => {
+                localStorage.removeItem('q_access_token');
+                setIsAuthenticated(false);
+              }} />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -90,7 +90,7 @@ const navItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onLogout }) {
   const location = useLocation();
 
   return (
@@ -167,6 +167,35 @@ export default function Sidebar() {
         })}
       </div>
 
+      {/* Logout Button */}
+      <div style={{ padding: 'var(--space-md)', borderTop: '1px solid var(--border-subtle)' }}>
+        <motion.div
+          whileHover={{ x: 4 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onLogout}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--space-sm)',
+            padding: '0.625rem 0.75rem',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            color: 'var(--text-secondary)',
+            background: 'transparent',
+            border: '1px solid transparent',
+            transition: 'all 200ms ease',
+            cursor: 'pointer',
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Logout
+        </motion.div>
+      </div>
 
     </nav>
   );
