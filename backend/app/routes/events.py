@@ -17,6 +17,7 @@ from app.models.event import Event
 from app.models.alert import Alert
 from app.models.identity import AgentIdentity
 from app.websocket.manager import manager
+from app.services.policy_engine import policy_engine, EventContext, apply_policy_verdict
 
 logger = logging.getLogger("q.events")
 router = APIRouter(prefix="/events", tags=["Events"])
@@ -138,6 +139,40 @@ async def ingest_event(
 
     event_dict = event.model_dump(mode="json")
     event_dict["id"] = db_event.id
+
+    # --- Policy Engine Evaluation ---
+    if event.agent_id:
+        ctx = EventContext(
+            agent_id=event.agent_id,
+            event_type=event.event_type,
+            tool_name=event.tool_name,
+            risk_level=event.risk_level,
+            input_data=event.input_data or {},
+            created_at=datetime.now(timezone.utc),
+            latency_ms=event.latency_ms,
+            agent_status=agent.status if agent else "active",
+            agent_framework=agent.framework if agent else None,
+        )
+        result = policy_engine.evaluate(ctx, db)
+        await apply_policy_verdict(result, ctx, db_event, db, manager)
+
+        # Block the event if policy says so
+        if not result.passed and result.action == "block":
+            return {
+                "status": "blocked",
+                "event_id": db_event.id,
+                "reason": result.block_reason,
+                "action": result.action,
+            }
+        if result.action == "quarantine":
+            return {
+                "status": "quarantined",
+                "event_id": db_event.id,
+                "reason": result.block_reason,
+            }
+
+        event_dict["policy_passed"] = result.passed
+        event_dict["policy_action"] = result.action
 
     # Real-time WebSocket Broadcast
     await manager.broadcast({

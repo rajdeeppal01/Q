@@ -96,3 +96,52 @@ def get_active_policies_for_agent(
             "actions": p.actions
         } for p in policies
     ]
+
+
+@router.get("/{policy_id}", response_model=PolicyResponse)
+def get_policy(
+    policy_id: str,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Get a single policy by ID."""
+    policy = db.execute(
+        select(Policy).where(Policy.id == policy_id, Policy.created_by == current_user.id)
+    ).scalars().first()
+    if not policy:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    return policy
+
+
+@router.patch("/{policy_id}/toggle")
+def toggle_policy(
+    policy_id: str,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Enable or disable a policy."""
+    policy = db.execute(
+        select(Policy).where(Policy.id == policy_id, Policy.created_by == current_user.id)
+    ).scalars().first()
+    if not policy:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    policy.is_active = not policy.is_active
+    db.commit()
+    return {"id": policy.id, "is_active": policy.is_active}
+
+
+@router.delete("/{policy_id}", status_code=204)
+def delete_policy(
+    policy_id: str,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """Permanently delete a policy."""
+    policy = db.execute(
+        select(Policy).where(Policy.id == policy_id, Policy.created_by == current_user.id)
+    ).scalars().first()
+    if not policy:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    db.delete(policy)
+    db.commit()
+
