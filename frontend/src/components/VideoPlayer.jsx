@@ -169,11 +169,10 @@ export const DemoVideoPlayer = () => {
           muted
           playsInline
           loop
-          crossOrigin="anonymous"
           style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }}
         >
           {/* We use a sample URL for the demo. The user can replace this later. */}
-          <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+          <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
         </video>
       </div>
     </div>
@@ -241,9 +240,8 @@ const VideoPopOver = ({ setShowVideoPopOver }) => {
       >
         <VideoPlayerWrapper style={{ width: "100%", height: "100%", background: 'black', borderRadius: '12px', overflow: 'hidden' }}>
           <VideoPlayerContent
-            src="https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             autoPlay
-            crossOrigin="anonymous"
             slot="media"
             style={{ width: "100%", height: "100%", objectFit: 'cover' }}
           />
