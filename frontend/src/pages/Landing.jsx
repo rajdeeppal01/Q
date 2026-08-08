@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggleButton } from '../components/ThemeToggle';
+import { DemoVideoPlayer } from '../components/VideoPlayer';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -127,25 +128,9 @@ export default function Landing() {
                 What's your agent's objective?
               </h2>
 
-              {/* Fake input box at bottom */}
-              <div style={{
-                position: 'absolute',
-                bottom: '1rem',
-                left: '1rem',
-                right: '1rem',
-                height: '60px',
-                background: 'rgba(255,255,255,0.9)',
-                borderRadius: '8px',
-                zIndex: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                padding: '0 1rem',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
-              }}>
-                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#94A3B8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </div>
+              {/* Video Player Demo */}
+              <div style={{ position: 'relative', zIndex: 10 }}>
+                <DemoVideoPlayer />
               </div>
             </div>
           </motion.div>
