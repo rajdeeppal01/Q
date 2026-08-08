@@ -1,28 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-// --- Types ---
-export type AnimationVariant = "circle" | "rectangle" | "gif" | "polygon" | "circle-blur";
-export type AnimationStart =
-  | "top-left"
-  | "top-right"
-  | "bottom-left"
-  | "bottom-right"
-  | "center"
-  | "top-center"
-  | "bottom-center"
-  | "bottom-up"
-  | "top-down"
-  | "left-right"
-  | "right-left";
-
-interface Animation {
-  name: string;
-  css: string;
-}
-
 // --- Animation Generators ---
-const getPositionCoords = (position: AnimationStart) => {
+const getPositionCoords = (position) => {
   switch (position) {
     case "top-left": return { cx: "0", cy: "0" };
     case "top-right": return { cx: "40", cy: "0" };
@@ -38,7 +18,7 @@ const getPositionCoords = (position: AnimationStart) => {
   }
 };
 
-const generateSVG = (variant: AnimationVariant, start: AnimationStart) => {
+const generateSVG = (variant, start) => {
   if (variant === "circle-blur") {
     if (start === "center") {
       return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="20" cy="20" r="18" fill="white" filter="url(%23blur)"/></svg>`;
@@ -55,7 +35,7 @@ const generateSVG = (variant: AnimationVariant, start: AnimationStart) => {
   return "";
 };
 
-const getTransformOrigin = (start: AnimationStart) => {
+const getTransformOrigin = (start) => {
   switch (start) {
     case "top-left": return "top left";
     case "top-right": return "top right";
@@ -72,16 +52,16 @@ const getTransformOrigin = (start: AnimationStart) => {
 };
 
 export const createAnimation = (
-  variant: AnimationVariant,
-  start: AnimationStart = "center",
+  variant,
+  start = "center",
   blur = false,
-  url?: string
-): Animation => {
+  url
+) => {
   const svg = generateSVG(variant, start);
   const transformOrigin = getTransformOrigin(start);
 
   if (variant === "rectangle") {
-    const getClipPath = (direction: AnimationStart) => {
+    const getClipPath = (direction) => {
       switch (direction) {
         case "bottom-up": return { from: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)", to: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" };
         case "top-down": return { from: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)", to: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" };
@@ -191,20 +171,15 @@ export const useThemeToggle = ({
   start = "center",
   blur = false,
   gifUrl = "",
-}: {
-  variant?: AnimationVariant;
-  start?: AnimationStart;
-  blur?: boolean;
-  gifUrl?: string;
 } = {}) => {
   const [isDark, setIsDark] = useState(
     typeof document !== "undefined" ? !document.documentElement.classList.contains('light-theme') : true
   );
 
   const styleId = "theme-transition-styles";
-  const updateStyles = useCallback((css: string) => {
+  const updateStyles = useCallback((css) => {
     if (typeof window === "undefined") return;
-    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+    let styleElement = document.getElementById(styleId);
     if (!styleElement) {
       styleElement = document.createElement("style");
       styleElement.id = styleId;
@@ -247,12 +222,6 @@ export const ThemeToggleButton = ({
   start = "center",
   blur = false,
   gifUrl = "",
-}: {
-  className?: string;
-  variant?: AnimationVariant;
-  start?: AnimationStart;
-  blur?: boolean;
-  gifUrl?: string;
 }) => {
   const { isDark, toggleTheme } = useThemeToggle({ variant, start, blur, gifUrl });
 
