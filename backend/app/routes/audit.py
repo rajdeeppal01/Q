@@ -154,6 +154,110 @@ def export_audit_log_csv(
     )
 
 
+@router.get("/events")
+def list_audit_events(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    risk_level: Optional[str] = Query(None),
+    event_type: Optional[str] = Query(None),
+    agent_id: Optional[str] = Query(None),
+    trace_id: Optional[str] = Query(None),
+    policy_passed: Optional[bool] = Query(None),
+    days: int = Query(7, ge=1, le=365),
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    """
+    Paginated, filterable audit event log for the Audit Trail page.
+    Returns events with agent name joined in.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    q = select(Event, Agent.name.label("agent_name")).join(
+        Agent, Event.agent_id == Agent.id, isouter=True
+    ).where(Event.created_at >= cutoff)
+
+    if risk_level:
+        q = q.where(Event.risk_level == risk_level)
+    if event_type:
+        q = q.where(Event.event_type == event_type)
+    if agent_id:
+        q = q.where(Event.agent_id == agent_id)
+    if trace_id:
+        q = q.where(Event.trace_id == trace_id)
+    if policy_passed is not None:
+        q = q.where(Event.policy_passed == policy_passed)
+
+    total = db.execute(select(func.count()).select_from(q.subquery())).scalar() or 0
+    rows = db.execute(q.order_by(Event.created_at.desc()).offset((page - 1) * page_size).limit(page_size)).all()
+
+    events_out = []
+    for row in rows:
+        ev = row[0]
+        agent_name = row[1] or ev.agent_id
+        events_out.append({
+            "id": ev.id,
+            "agent_id": ev.agent_id,
+            "agent_name": agent_name,
+            "event_type": ev.event_type,
+            "tool_name": ev.tool_name,
+            "risk_level": ev.risk_level,
+            "policy_checked": ev.policy_checked,
+            "policy_passed": ev.policy_passed,
+            "latency_ms": ev.latency_ms,
+            "trace_id": ev.trace_id,
+            "error_message": ev.error_message,
+            "created_at": ev.created_at.isoformat() if ev.created_at else None,
+        })
+
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "pages": max(1, (total + page_size - 1) // page_size),
+        "events": events_out,
+    }
+
+
+@router.get("/export")
+def export_platform_audit_csv(
+    days: int = Query(7, ge=1, le=365),
+    risk_level: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    """Export platform-wide audit log as CSV."""
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    q = select(Event, Agent.name.label("agent_name")).join(
+        Agent, Event.agent_id == Agent.id, isouter=True
+    ).where(Event.created_at >= cutoff).order_by(Event.created_at.desc()).limit(5000)
+    if risk_level:
+        q = q.where(Event.risk_level == risk_level)
+
+    rows = db.execute(q).all()
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Timestamp", "Event ID", "Agent", "Event Type", "Tool Name",
+                     "Risk Level", "Policy Passed", "Latency (ms)", "Trace ID", "Error"])
+    for row in rows:
+        ev, agent_name = row[0], row[1] or ""
+        writer.writerow([
+            ev.created_at.isoformat() if ev.created_at else "",
+            ev.id, agent_name, ev.event_type, ev.tool_name or "",
+            ev.risk_level,
+            "YES" if ev.policy_passed else ("NO" if ev.policy_passed is False else "N/A"),
+            round(ev.latency_ms, 1) if ev.latency_ms else "",
+            ev.trace_id or "",
+            ev.error_message or "",
+        ])
+    output.seek(0)
+    filename = f"q_audit_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
+    )
+
+
 @router.get("/compliance/summary")
 def get_platform_compliance_summary(
     days: int = Query(30, ge=1, le=365),
