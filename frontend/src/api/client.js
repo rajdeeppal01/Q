@@ -25,6 +25,7 @@ const qFetch = async (endpoint, options = {}) => {
 };
 
 export const api = {
+  qFetch,  // expose for ad-hoc calls
   // Auth
   login: async (username, password) => {
     const formData = new URLSearchParams();
@@ -85,5 +86,7 @@ export const api = {
     method: 'DELETE'
   }),
   // Compliance
-  getAuditReport: (agentId) => qFetch(`/audit/report/${agentId}`)
+  getComplianceSummary: (days = 30) => qFetch(`/audit/compliance/summary?days=${days}`),
+  getAuditReport: (agentId) => qFetch(`/audit/report/${agentId}`),
+  togglePolicy: (id) => qFetch(`/policies/${id}/toggle`, { method: 'PATCH' }),
 };

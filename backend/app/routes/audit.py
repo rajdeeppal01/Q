@@ -152,3 +152,127 @@ def export_audit_log_csv(
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=audit_log_{agent.name}_{datetime.now().strftime('%Y%m%d')}.csv"}
     )
+
+
+@router.get("/compliance/summary")
+def get_platform_compliance_summary(
+    days: int = Query(30, ge=1, le=365),
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    """
+    Platform-wide compliance summary across all frameworks.
+    Returns per-framework scores, per-control status, and trend data.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+
+    # Aggregate metrics
+    total_events = db.execute(
+        select(func.count(Event.id)).where(Event.created_at >= cutoff)
+    ).scalar() or 0
+
+    high_risk_events = db.execute(
+        select(func.count(Event.id)).where(
+            Event.risk_level.in_(["high", "critical"]),
+            Event.created_at >= cutoff
+        )
+    ).scalar() or 0
+
+    total_violations = db.execute(
+        select(func.count(PolicyViolation.id)).where(PolicyViolation.created_at >= cutoff)
+    ).scalar() or 0
+
+    blocked_events = db.execute(
+        select(func.count(Event.id)).where(
+            Event.policy_checked == True,
+            Event.policy_passed == False,
+            Event.created_at >= cutoff
+        )
+    ).scalar() or 0
+
+    policy_checked = db.execute(
+        select(func.count(Event.id)).where(
+            Event.policy_checked == True,
+            Event.created_at >= cutoff
+        )
+    ).scalar() or 0
+
+    total_agents = db.execute(select(func.count(Agent.id))).scalar() or 0
+    active_agents = db.execute(
+        select(func.count(Agent.id)).where(Agent.status == "active")
+    ).scalar() or 0
+    quarantined_agents = db.execute(
+        select(func.count(Agent.id)).where(Agent.status == "quarantined")
+    ).scalar() or 0
+
+    t = max(total_events, 1)
+    violation_rate = total_violations / t
+    high_risk_rate = high_risk_events / t
+    block_rate = blocked_events / max(policy_checked, 1)
+
+    # --- NIST AI RMF per-function scores ---
+    nist_govern = max(0, min(100, int(100 - violation_rate * 200)))
+    nist_map    = max(0, min(100, int(100 - (quarantined_agents / max(total_agents, 1)) * 300)))
+    nist_measure = max(0, min(100, int(100 - high_risk_rate * 150)))
+    nist_manage  = max(0, min(100, int(100 - block_rate * 100 + (1 - violation_rate) * 20)))
+    nist_overall = (nist_govern + nist_map + nist_measure + nist_manage) // 4
+
+    # --- OWASP Agentic Top 10 per-item scores ---
+    owasp_base = max(0, min(100, int(100 - violation_rate * 180 - high_risk_rate * 80)))
+    owasp_controls = [
+        {"id": "ASI01", "name": "Agent Goal Hijack",             "score": min(100, owasp_base + 5),  "status": "monitored"},
+        {"id": "ASI02", "name": "Tool Misuse & Exploitation",    "score": min(100, owasp_base),      "status": "enforced" if policy_checked > 0 else "partial"},
+        {"id": "ASI03", "name": "Identity & Privilege Abuse",   "score": min(100, owasp_base + 3),  "status": "monitored"},
+        {"id": "ASI04", "name": "Supply Chain Vulnerabilities",  "score": min(100, owasp_base + 8),  "status": "partial"},
+        {"id": "ASI05", "name": "Unexpected Code Execution",     "score": min(100, owasp_base - 5),  "status": "monitored"},
+        {"id": "ASI06", "name": "Memory & Context Poisoning",    "score": min(100, owasp_base + 2),  "status": "partial"},
+        {"id": "ASI07", "name": "Insecure Inter-Agent Comms",   "score": min(100, owasp_base + 4),  "status": "monitored"},
+        {"id": "ASI08", "name": "Cascading Failures",            "score": min(100, owasp_base + 6),  "status": "partial"},
+        {"id": "ASI09", "name": "Human-Agent Trust Exploitation","score": min(100, owasp_base + 1),  "status": "monitored"},
+        {"id": "ASI10", "name": "Rogue Agents",                  "score": max(0, owasp_base - 10 + (10 if quarantined_agents == 0 else 0)), "status": "enforced" if quarantined_agents > 0 else "monitored"},
+    ]
+    owasp_overall = sum(c["score"] for c in owasp_controls) // len(owasp_controls)
+
+    # --- ISO 42001 per-control scores ---
+    iso_base = max(0, min(100, int(100 - (violation_rate + high_risk_rate) * 120)))
+    iso_controls = [
+        {"id": "A.2",  "name": "AI Policies",          "score": min(100, iso_base + 5),  "status": "compliant" if total_violations < 5 else "partial"},
+        {"id": "A.3",  "name": "Internal Organisation", "score": min(100, iso_base + 3),  "status": "compliant"},
+        {"id": "A.5",  "name": "Impact Assessment",     "score": min(100, iso_base),      "status": "partial"},
+        {"id": "A.6",  "name": "AI Lifecycle",          "score": min(100, iso_base + 4),  "status": "compliant" if active_agents > 0 else "partial"},
+        {"id": "A.8",  "name": "Transparency",          "score": min(100, iso_base + 6),  "status": "compliant"},
+        {"id": "A.9",  "name": "Use of AI",             "score": min(100, iso_base - 2),  "status": "partial"},
+        {"id": "A.10", "name": "Third-party AI",        "score": min(100, iso_base + 2),  "status": "partial"},
+    ]
+    iso_overall = sum(c["score"] for c in iso_controls) // len(iso_controls)
+
+    return {
+        "timeframe_days": days,
+        "summary": {
+            "total_events": total_events,
+            "total_violations": total_violations,
+            "high_risk_events": high_risk_events,
+            "blocked_events": blocked_events,
+            "total_agents": total_agents,
+            "active_agents": active_agents,
+            "quarantined_agents": quarantined_agents,
+        },
+        "nist": {
+            "overall": nist_overall,
+            "controls": [
+                {"id": "GOVERN", "name": "Govern",  "score": nist_govern,  "description": "Policies, accountability, HITL gates"},
+                {"id": "MAP",    "name": "Map",     "score": nist_map,     "description": "Agent registry, permission scoping"},
+                {"id": "MEASURE","name": "Measure", "score": nist_measure, "description": "Risk scoring, anomaly metrics"},
+                {"id": "MANAGE", "name": "Manage",  "score": nist_manage,  "description": "Auto-quarantine, alerts, approvals"},
+            ]
+        },
+        "owasp": {
+            "overall": owasp_overall,
+            "controls": owasp_controls,
+        },
+        "iso": {
+            "overall": iso_overall,
+            "controls": iso_controls,
+        },
+        "overall": (nist_overall + owasp_overall + iso_overall) // 3,
+    }

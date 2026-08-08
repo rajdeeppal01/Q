@@ -8,6 +8,7 @@ import { Approvals } from './pages/Approvals';
 import { Auth } from './pages/Auth';
 import AgentRegistry from './pages/AgentRegistry';
 import LiveMonitor from './pages/LiveMonitor';
+import Compliance from './pages/Compliance';
 import { api } from './api/client';
 
 
@@ -23,7 +24,7 @@ function AppLayout({ onLogout }) {
           <Route path="/monitor" element={<LiveMonitor />} />
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
-          <Route path="/compliance" element={<Placeholder title="Compliance" />} />
+          <Route path="/compliance" element={<Compliance />} />
           <Route path="/alerts" element={<Placeholder title="Alerts" />} />
         </Routes>
       </main>
