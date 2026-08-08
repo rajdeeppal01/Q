@@ -230,9 +230,10 @@ export const ThemeToggleButton = ({
       type="button"
       className={className}
       style={{
-        width: 40, height: 40, borderRadius: '50%', background: 'black',
+        width: 28, height: 28, borderRadius: '50%', background: 'black',
         padding: 0, border: 'none', cursor: 'pointer', transition: 'transform 0.2s',
-        display: 'flex', alignItems: 'center', justifyContent: 'center'
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0
       }}
       onClick={toggleTheme}
       aria-label="Toggle theme"
