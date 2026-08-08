@@ -55,10 +55,15 @@ export const api = {
   // Agents
   getAgents: () => qFetch('/agents/'),
   getAgent: (id) => qFetch(`/agents/${id}`),
+  registerAgent: (agentData) => qFetch('/agents/register', {
+    method: 'POST',
+    body: JSON.stringify(agentData)
+  }),
   updateAgentStatus: (id, status) => qFetch(`/agents/${id}/status`, {
     method: 'PUT',
     body: JSON.stringify({ status })
   }),
+  rotateAgentKey: (id) => qFetch(`/agents/${id}/keys/rotate`, { method: 'POST' }),
   
   // Alerts
   getAlerts: () => qFetch('/alerts/'),

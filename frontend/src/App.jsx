@@ -6,6 +6,7 @@ import Landing from './pages/Landing';
 import { Policies } from './pages/Policies';
 import { Approvals } from './pages/Approvals';
 import { Auth } from './pages/Auth';
+import AgentRegistry from './pages/AgentRegistry';
 import { api } from './api/client';
 
 
@@ -17,7 +18,7 @@ function AppLayout({ onLogout }) {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/policies" element={<Policies />} />
-          <Route path="/agents" element={<Placeholder title="Agent Registry" />} />
+          <Route path="/agents" element={<AgentRegistry />} />
           <Route path="/monitor" element={<Placeholder title="Live Monitor" />} />
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/audit" element={<Placeholder title="Audit Trail" />} />
