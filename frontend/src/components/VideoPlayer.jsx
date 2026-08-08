@@ -172,7 +172,7 @@ export const DemoVideoPlayer = () => {
           style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }}
         >
           {/* We use a sample URL for the demo. The user can replace this later. */}
-          <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
         </video>
       </div>
     </div>
@@ -240,7 +240,7 @@ const VideoPopOver = ({ setShowVideoPopOver }) => {
       >
         <VideoPlayerWrapper style={{ width: "100%", height: "100%", background: 'black', borderRadius: '12px', overflow: 'hidden' }}>
           <VideoPlayerContent
-            src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            src="https://www.w3schools.com/html/mov_bbb.mp4"
             autoPlay
             slot="media"
             style={{ width: "100%", height: "100%", objectFit: 'cover' }}
