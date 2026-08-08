@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { api } from '../api/client';
+import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, Key, User as UserIcon, Shield } from 'lucide-react';
 
 export const Auth = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -23,6 +25,7 @@ export const Auth = ({ onLogin }) => {
         const data = await api.login(formData.email, formData.password);
         localStorage.setItem('q_access_token', data.access_token);
         onLogin(data.user);
+        navigate('/dashboard');
       } else {
         const data = await api.register({
           email: formData.email,
@@ -31,6 +34,7 @@ export const Auth = ({ onLogin }) => {
         });
         localStorage.setItem('q_access_token', data.access_token);
         onLogin(data.user);
+        navigate('/dashboard');
       }
     } catch (err) {
       setError(err.message || 'Authentication failed. Please check your credentials.');

@@ -89,13 +89,14 @@ export default function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
-        
+
+        {/* Login always shows the Auth form — no auto-redirect */}
         <Route 
           path="/login" 
           element={
-            isAuthenticated ? 
-            <Navigate to="/dashboard" replace /> : 
-            <Auth onLogin={() => setIsAuthenticated(true)} />
+            <Auth onLogin={() => {
+              setIsAuthenticated(true);
+            }} />
           } 
         />
 
