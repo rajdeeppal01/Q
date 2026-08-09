@@ -76,7 +76,7 @@ function RiskBadge({ level }) {
   const c = colors[level] || '#55556A';
   return (
     <span style={{
-      padding: '2px 8px', borderRadius: '999px',
+      padding: '2px 8px', borderRadius: '0px',
       background: `${c}20`, color: c,
       fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase',
       letterSpacing: '0.05em', border: `1px solid ${c}40`,
@@ -124,7 +124,7 @@ function AgentRiskBar({ agent, maxScore }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
       <div style={{
-        width: 28, height: 28, borderRadius: 6, flexShrink: 0,
+        width: 28, height: 28, borderRadius: 0, flexShrink: 0,
         background: `${color}20`, border: `1px solid ${color}40`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: '0.7rem', fontWeight: 800, color,
@@ -140,12 +140,12 @@ function AgentRiskBar({ agent, maxScore }) {
             {agent.score}
           </span>
         </div>
-        <div style={{ height: 4, background: 'var(--bg-deep)', borderRadius: '999px', overflow: 'hidden' }}>
+        <div style={{ height: 4, background: 'var(--bg-deep)', borderRadius: '0px', overflow: 'hidden' }}>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${pct}%` }}
             transition={{ delay: 0.4 + Math.random() * 0.3, duration: 0.8, ease: 'easeOut' }}
-            style={{ height: '100%', background: color, borderRadius: '999px', boxShadow: `0 0 6px ${color}80` }}
+            style={{ height: '100%', background: color, borderRadius: '0px', boxShadow: `0 0 6px ${color}80` }}
           />
         </div>
       </div>

@@ -14,7 +14,7 @@ function Badge({ count, color }) {
       style={{
         marginLeft: 'auto',
         minWidth: 18, height: 18,
-        borderRadius: 999,
+        borderRadius: 0,
         background: color,
         color: '#fff',
         fontSize: '0.65rem',
@@ -202,7 +202,7 @@ export default function Sidebar({ onLogout }) {
                     {item.icon}
                     <span style={{
                       position: 'absolute', top: -2, right: -2,
-                      width: 6, height: 6, borderRadius: '50%',
+                      width: 6, height: 6, borderRadius: '0%',
                       background: '#10B981', boxShadow: '0 0 6px #10B981',
                       animation: 'livePulse 2s ease-in-out infinite',
                     }} />
@@ -228,19 +228,19 @@ export default function Sidebar({ onLogout }) {
       <div style={{ padding: '0.625rem var(--space-md)', borderTop: '1px solid var(--border-subtle)', display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
         {counts.alerts > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: '#EF4444' }}>
-            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#EF4444', boxShadow: '0 0 5px #EF4444', animation: 'livePulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
+            <span style={{ width: 5, height: 5, borderRadius: '0%', background: '#EF4444', boxShadow: '0 0 5px #EF4444', animation: 'livePulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
             {counts.alerts} alert{counts.alerts > 1 ? 's' : ''}
           </div>
         )}
         {counts.approvals > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: '#F59E0B' }}>
-            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#F59E0B', boxShadow: '0 0 5px #F59E0B', animation: 'livePulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
+            <span style={{ width: 5, height: 5, borderRadius: '0%', background: '#F59E0B', boxShadow: '0 0 5px #F59E0B', animation: 'livePulse 1.5s ease-in-out infinite', display: 'inline-block' }} />
             {counts.approvals} pending
           </div>
         )}
         {counts.alerts === 0 && counts.approvals === 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: '#10B981' }}>
-            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 5px #10B981', display: 'inline-block' }} />
+            <span style={{ width: 5, height: 5, borderRadius: '0%', background: '#10B981', boxShadow: '0 0 5px #10B981', display: 'inline-block' }} />
             All clear
           </div>
         )}

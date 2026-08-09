@@ -45,8 +45,6 @@ export const Auth = ({ onLogin }) => {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#18181a',
-      backgroundImage: 'radial-gradient(circle at 80% -10%, rgba(0, 229, 255, 0.5) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%)',
       color: '#d4d4d8',
       fontFamily: 'var(--font-mono)',
       fontSize: '1.2rem',
