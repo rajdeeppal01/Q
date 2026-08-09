@@ -117,16 +117,7 @@ export default function Landing() {
         </>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span>
-        <span style={{ 
-          display: 'inline-block', 
-          width: '12px', 
-          height: '22px', 
-          backgroundColor: 'var(--accent)',
-          animation: 'blink 1s step-end infinite'
-        }} />
-      </div>
+
     </div>
   );
 }
