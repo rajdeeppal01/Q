@@ -7,7 +7,7 @@ export default function Landing() {
     <div style={{
       minHeight: '100vh',
       backgroundColor: '#18181a',
-      backgroundImage: 'radial-gradient(circle at 80% -10%, rgba(93, 117, 108, 0.3) 0%, rgba(55, 78, 80, 0.15) 40%, transparent 70%)',
+      backgroundImage: 'radial-gradient(circle at 80% -10%, rgba(0, 229, 255, 0.5) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%)',
       color: '#d4d4d8',
       fontFamily: 'var(--font-mono)',
       fontSize: '1.2rem',
@@ -23,7 +23,7 @@ export default function Landing() {
           50% { opacity: 0; }
         }
         .term-link {
-          color: #e67657;
+          color: var(--accent);
           cursor: pointer;
           text-decoration: none;
           transition: opacity 0.2s;
@@ -36,7 +36,7 @@ export default function Landing() {
 
       <div style={{ lineHeight: '1.6', marginBottom: '2.5rem' }}>
         <div>
-          We built <strong style={{ color: '#ffffff', fontWeight: 600 }}>Q</strong>,
+          I built <strong style={{ color: '#ffffff', fontWeight: 600 }}>Q</strong>,
         </div>
         <div>the next-gen operating</div>
         <div>system for AI agents.</div>
@@ -46,7 +46,7 @@ export default function Landing() {
         <span style={{ color: '#8b8b99' }}>/dev/agents &gt;</span> ls
       </div>
 
-      <div style={{ color: '#e67657', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '2.5rem' }}>
+      <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '2.5rem' }}>
         <span className="term-link">about</span>
         <span className="term-link">jobs</span>
         <span className="term-link">who</span>
@@ -58,10 +58,9 @@ export default function Landing() {
         <span style={{ color: '#8b8b99' }}>/dev/agents &gt;</span>
         <span style={{ 
           display: 'inline-block', 
-          width: '14px', 
+          width: '12px', 
           height: '22px', 
-          border: '2px solid #e67657',
-          borderRadius: '2px 10px 10px 10px',
+          backgroundColor: 'var(--accent)',
           animation: 'blink 1s step-end infinite'
         }} />
       </div>
