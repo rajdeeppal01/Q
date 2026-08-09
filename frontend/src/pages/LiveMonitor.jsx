@@ -20,40 +20,6 @@ const EVENT_TYPE_ICONS = {
   decision:    '🧠',
   default:     '',
 };
-
-const MOCK_AGENTS = [
-  { id: 'ag-001', name: 'gpt-4-researcher' },
-  { id: 'ag-002', name: 'claude-analyst' },
-  { id: 'ag-003', name: 'data-pipeline-bot' },
-  { id: 'ag-004', name: 'code-reviewer' },
-  { id: 'ag-005', name: 'financial-advisor' },
-  { id: 'ag-006', name: 'support-router' },
-];
-
-const MOCK_TOOLS = ['web_search','read_file','write_file','query_database','send_email','api_call','execute_code','access_pii','llm_plan','memory_update'];
-const RISK_WEIGHTS = ['low','low','low','low','medium','medium','high','critical'];
-
-function generateMockEvent(i) {
-  const agent = MOCK_AGENTS[i % MOCK_AGENTS.length];
-  const risk = RISK_WEIGHTS[Math.floor(Math.random() * RISK_WEIGHTS.length)];
-  const types = ['tool_call','llm_invoke','data_access','decision','error'];
-  const etype = types[Math.floor(Math.random() * (risk === 'critical' ? types.length : 3))];
-  return {
-    id: `ev-${Date.now()}-${i}`,
-    agent_id: agent.id,
-    agent_name: agent.name,
-    tool_name: MOCK_TOOLS[Math.floor(Math.random() * MOCK_TOOLS.length)],
-    event_type: etype,
-    risk_level: risk,
-    latency_ms: Math.floor(Math.random() * 900) + 30,
-    policy_passed: risk !== 'critical' ? Math.random() > 0.15 : Math.random() > 0.6,
-    trace_id: `tr-${Math.floor(Math.random() * 999).toString().padStart(3,'0')}`,
-    input_data: { query: `sample_input_${i}` },
-    output_data: { result: `sample_output_${i}` },
-    created_at: new Date().toISOString(),
-  };
-}
-
 // --- Event Row ---
 function EventRow({ event, onClick, isSelected }) {
   const risk = RISK_COLORS[event.risk_level] || RISK_COLORS.low;
@@ -272,7 +238,7 @@ function StatsBar({ events, wsConnected, paused }) {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
         <div style={{ width: 7, height: 7, borderRadius: '50%', background: wsConnected ? '#10B981' : '#F59E0B', boxShadow: wsConnected ? '0 0 6px #10B981' : 'none', animation: wsConnected && !paused ? 'pulse-quarantine 1.5s infinite' : 'none' }} />
-        <span style={{ color: 'var(--text-muted)' }}>{wsConnected ? 'Live' : 'Simulated'}</span>
+        <span style={{ color: 'var(--text-muted)' }}>{wsConnected ? 'Live' : 'Connecting...'}</span>
       </div>
       <span style={{ color: 'var(--text-muted)' }}>Total: <strong style={{ color: 'var(--text-primary)' }}>{events.length}</strong></span>
       {[['low','#10B981'],['medium','#F59E0B'],['high','#F97316'],['critical','#EF4444']].map(([r, c]) => (
@@ -304,8 +270,6 @@ export default function LiveMonitor() {
   const [maxEvents, setMaxEvents] = useState(200);
   const feedRef = useRef(null);
   const pausedRef = useRef(false);
-  const tickRef = useRef(null);
-  const counterRef = useRef(0);
 
   pausedRef.current = paused;
 
@@ -313,21 +277,11 @@ export default function LiveMonitor() {
     if (pausedRef.current) return;
     const enriched = {
       ...ev,
-      agent_name: ev.agent_name || MOCK_AGENTS.find(a => a.id === ev.agent_id)?.name || ev.agent_id?.slice(0, 14) || 'unknown',
+      agent_name: ev.agent_name || ev.agent_id?.slice(0, 14) || 'unknown',
       created_at: ev.created_at || new Date().toISOString(),
     };
     setEvents(prev => [enriched, ...prev].slice(0, maxEvents));
   }, [maxEvents]);
-
-  // Simulated events ticker
-  useEffect(() => {
-    tickRef.current = setInterval(() => {
-      if (!wsConnected) {
-        addEvent(generateMockEvent(counterRef.current++));
-      }
-    }, 1200);
-    return () => clearInterval(tickRef.current);
-  }, [wsConnected, addEvent]);
 
   // WebSocket
   useEffect(() => {
@@ -347,11 +301,6 @@ export default function LiveMonitor() {
     return () => ws?.close();
   }, [addEvent]);
 
-  // Seed initial events
-  useEffect(() => {
-    const seed = Array.from({ length: 30 }, (_, i) => generateMockEvent(i));
-    setEvents(seed);
-  }, []);
 
   const agentOptions = [...new Set(events.map(e => e.agent_name || e.agent_id).filter(Boolean))];
   const typeOptions  = [...new Set(events.map(e => e.event_type).filter(Boolean))];

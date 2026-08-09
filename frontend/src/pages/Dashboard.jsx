@@ -189,7 +189,7 @@ export default function Dashboard() {
             boxShadow: wsConnected ? '0 0 8px var(--status-active)' : 'none',
           }} />
           <span style={{ color: 'var(--accent)' }}>
-            {wsConnected ? 'Live WebSocket' : 'Simulated Feed'}
+            {wsConnected ? 'Live WebSocket' : 'Connecting...'}
           </span>
         </div>
       </div>

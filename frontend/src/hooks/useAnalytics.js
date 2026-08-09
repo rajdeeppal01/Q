@@ -1,57 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { WS_URL } from '../api/config';
-
-// --- Simulated Data Seed ---
-const MOCK_AGENTS = [
-  { id: 'ag-001', name: 'gpt-4-researcher', framework: 'LangChain', risk_level: 'low' },
-  { id: 'ag-002', name: 'claude-analyst', framework: 'AutoGen', risk_level: 'medium' },
-  { id: 'ag-003', name: 'data-pipeline-bot', framework: 'Custom', risk_level: 'high' },
-  { id: 'ag-004', name: 'code-reviewer', framework: 'CrewAI', risk_level: 'low' },
-  { id: 'ag-005', name: 'financial-advisor', framework: 'LangChain', risk_level: 'critical' },
-  { id: 'ag-006', name: 'support-router', framework: 'Custom', risk_level: 'low' },
-];
-
-const MOCK_TOOLS = [
-  'web_search', 'read_file', 'write_file', 'query_database',
-  'send_email', 'api_call', 'execute_code', 'access_pii',
-];
-
-const RISK_LEVELS = ['low', 'low', 'low', 'medium', 'medium', 'high', 'critical'];
-
-function generateMockEvent(i) {
-  const agent = MOCK_AGENTS[i % MOCK_AGENTS.length];
-  const risk = RISK_LEVELS[Math.floor(Math.random() * RISK_LEVELS.length)];
-  return {
-    id: `ev-${Date.now()}-${i}`,
-    agent_id: agent.id,
-    agent_name: agent.name,
-    tool_name: MOCK_TOOLS[Math.floor(Math.random() * MOCK_TOOLS.length)],
-    event_type: 'tool_call',
-    risk_level: risk,
-    latency_ms: Math.floor(Math.random() * 800) + 50,
-    policy_passed: risk !== 'critical' ? Math.random() > 0.15 : Math.random() > 0.5,
-    created_at: new Date(Date.now() - i * 3000).toISOString(),
-  };
-}
-
-function buildInitialHistory() {
-  // 60 ticks of simulated activity (last 60 seconds)
-  return Array.from({ length: 60 }, (_, i) => {
-    const base = Math.floor(Math.random() * 8) + 2;
-    return {
-      time: new Date(Date.now() - (59 - i) * 1000).toLocaleTimeString('en-US', { hour12: false }),
-      total: base,
-      low: Math.max(0, base - Math.floor(Math.random() * 3)),
-      medium: Math.floor(Math.random() * 2),
-      high: Math.random() > 0.7 ? 1 : 0,
-      critical: Math.random() > 0.9 ? 1 : 0,
-    };
-  });
-}
-
-function buildInitialEvents(count = 15) {
-  return Array.from({ length: count }, (_, i) => generateMockEvent(i));
-}
 
 function computeRiskCounts(events) {
   return events.reduce((acc, ev) => {
@@ -67,6 +15,10 @@ function computeComplianceScores(events) {
   const policyRate = passed / total;
   const riskRate = 1 - (highRisk / total);
 
+  if (events.length === 0) {
+    return { nist: 100, owasp: 100, iso: 100 };
+  }
+
   return {
     nist: Math.round(Math.min(95, (policyRate * 60 + riskRate * 40) * 100)),
     owasp: Math.round(Math.min(92, (policyRate * 50 + riskRate * 50) * 100)),
@@ -74,7 +26,7 @@ function computeComplianceScores(events) {
   };
 }
 
-function computeAgentRisk(events, agents) {
+function computeAgentRisk(events) {
   const riskMap = { low: 1, medium: 3, high: 7, critical: 15 };
   const agentScores = {};
 
@@ -91,14 +43,11 @@ function computeAgentRisk(events, agents) {
     .slice(0, 5);
 }
 
-// --- Hook ---
 export function useAnalytics() {
-  const [events, setEvents] = useState(() => buildInitialEvents(15));
-  const [activityHistory, setActivityHistory] = useState(() => buildInitialHistory());
+  const [events, setEvents] = useState([]);
+  const [activityHistory, setActivityHistory] = useState([]);
   const [wsConnected, setWsConnected] = useState(false);
-  const tickRef = useRef(null);
 
-  // Append incoming WebSocket event and update history
   const handleIncomingEvent = useCallback((ev) => {
     const enriched = {
       ...ev,
@@ -132,18 +81,6 @@ export function useAnalytics() {
     });
   }, []);
 
-  // Simulate live ticks when no real WebSocket data
-  useEffect(() => {
-    tickRef.current = setInterval(() => {
-      if (!wsConnected) {
-        const mockEv = generateMockEvent(Math.floor(Math.random() * 100));
-        handleIncomingEvent(mockEv);
-      }
-    }, 2500);
-    return () => clearInterval(tickRef.current);
-  }, [wsConnected, handleIncomingEvent]);
-
-  // WebSocket connection
   useEffect(() => {
     let ws;
     try {
@@ -163,7 +100,7 @@ export function useAnalytics() {
 
   const riskCounts = computeRiskCounts(events);
   const complianceScores = computeComplianceScores(events);
-  const topAgentsByRisk = computeAgentRisk(events, MOCK_AGENTS);
+  const topAgentsByRisk = computeAgentRisk(events);
 
   const kpis = {
     totalEvents: events.length,
