@@ -150,7 +150,7 @@ export const Auth = ({ onLogin }) => {
 
         <div style={{ marginTop: '1rem', display: 'flex', gap: '2rem' }}>
           <button type="submit" disabled={isLoading} className="term-btn">
-            {isLoading ? '[ Authenticating... ]' : '[ Execute ]'}
+            {isLoading ? '[ Authenticating... ]' : '[ Enter ]'}
           </button>
           
           <button 
@@ -159,7 +159,7 @@ export const Auth = ({ onLogin }) => {
             style={{ color: '#8b8b99', textDecoration: 'none' }}
             onClick={() => { setIsLogin(!isLogin); setError(null); }}
           >
-            {isLogin ? '&gt; switch_to_signup' : '&gt; switch_to_login'}
+            {isLogin ? 'Switch to signup' : 'Switch to login'}
           </button>
         </div>
       </form>
