@@ -13,15 +13,7 @@ function EmptyState({ onCreate }) {
         minHeight: 360, textAlign: 'center', gap: '1.5rem',
       }}
     >
-      <div style={{
-        width: 80, height: 80, borderRadius: 20,
-        background: 'linear-gradient(135deg, rgba(0,229,255,0.15), rgba(168,85,247,0.15))',
-        border: '1px solid var(--border-accent)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 0 40px rgba(0,229,255,0.1)',
-      }}>
-        <Shield size={36} color="var(--accent)" />
-      </div>
+
       <div>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Welcome to Q! Let's get started.</h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: 400 }}>
@@ -228,7 +220,7 @@ export const Policies = () => {
           </p>
         </div>
         <button className="btn btn-primary" onClick={() => setShowModal(true)} style={{ gap: '0.5rem' }}>
-          <Plus size={16} /> Create Rule
+          <Plus size={16} /> Create Policy
         </button>
       </div>
 
