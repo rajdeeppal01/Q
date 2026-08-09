@@ -55,16 +55,34 @@ export default function Landing() {
 
       {view === 'home' && (
         <>
-          <div style={{ marginBottom: '2.5rem' }}>
-            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> ls
-          </div>
-
           <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '2.5rem' }}>
+            <span className="term-link" onClick={() => setView('meet_q')}>meet_q/</span>
             <span className="term-link" onClick={() => setView('features')}>features/</span>
             <span className="term-link" onClick={() => setView('docs')}>docs/</span>
             <br />
             <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./login</span>
             <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./signup</span>
+          </div>
+        </>
+      )}
+
+      {view === 'meet_q' && (
+        <>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat meet_q.md
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px', color: '#a1a1aa' }}>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q CAME TO BE:</div>
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              We unleashed autonomous AI agents, but quickly realized they had no brakes. 
+              Q was built to change that. It is the ultimate kill switch and governance layer—giving you the power to intercept rogue actions, enforce programmatic guardrails, and audit every move your agents make in real-time.
+            </div>
+            <div style={{ color: '#d4d4d8', fontStyle: 'italic', marginBottom: '1rem' }}>
+              Total autonomy, with total control.
+            </div>
+            <br />
+            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
           </div>
         </>
       )}
@@ -116,7 +134,6 @@ export default function Landing() {
           </div>
         </>
       )}
-
 
     </div>
   );
