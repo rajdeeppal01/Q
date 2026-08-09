@@ -247,8 +247,9 @@ async def apply_policy_verdict(
             agent_id=ctx.agent_id,
             alert_type="policy_violation",
             severity="critical" if result.action == "quarantine" else "high" if result.action == "block" else "medium",
-            message=result.block_reason or "Policy violation detected",
-            context={
+            title=result.block_reason or "Policy violation detected",
+            description=f"Action taken: {result.action}. Tool: {ctx.tool_name}",
+            evidence={
                 "event_id": db_event.id,
                 "action": result.action,
                 "policies": result.triggered_policies,
