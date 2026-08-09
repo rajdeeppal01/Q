@@ -56,7 +56,7 @@ export default function Landing() {
           <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '2.5rem' }}>
             <span className="term-link" onClick={() => setView('meet_q')}>meet_q/</span>
             <span className="term-link" onClick={() => setView('features')}>features/</span>
-            <span className="term-link" onClick={() => setView('docs')}>docs/</span>
+            <span className="term-link" onClick={() => setView('how_to')}>how_to/</span>
             <br />
             <span className="term-link" onClick={() => navigate('/login', { state: { isSignup: true } })} style={{ fontWeight: 600 }}>&gt; ./create_account</span>
             <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./login</span>
@@ -118,35 +118,33 @@ export default function Landing() {
         </>
       )}
 
-      {view === 'docs' && (
+      {view === 'how_to' && (
         <>
           <div style={{ marginBottom: '2.5rem' }}>
-            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat how_it_works.md
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat how_to.md
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '700px', color: '#a1a1aa' }}>
-            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS:</div>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW TO GET STARTED:</div>
             
-            <div style={{ marginBottom: '0.5rem', lineHeight: 1.5 }}>
-              Q acts as a middleware interceptor for your agents. You just install the SDK and decorate your dangerous tools.
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              <strong style={{ color: '#d4d4d8' }}>1. Create an Account:</strong><br/>
+              Sign up for Q and access your secure Mission Control dashboard.
             </div>
             
-            <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
-              <div style={{ color: '#8b8b99', marginBottom: '1rem' }}># 1. Install the SDK via pip: $ pip install q-agent-sdk</div>
-              <div><span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval</div>
-              <br />
-              <div style={{ color: '#8b8b99', marginBottom: '0.25rem' }}># 2. Initialize with your API Key</div>
-              <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(name=<span style={{ color: '#98c379' }}>"support-bot"</span>, api_key=<span style={{ color: '#98c379' }}>"q_sk_..."</span>)</div>
-              <br />
-              <div style={{ color: '#8b8b99', marginBottom: '0.25rem' }}># 3. Decorate your dangerous tools</div>
-              <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"critical"</span>)</div>
-              <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Refunding money"</span>)</div>
-              <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>refund_customer</span>(amount):</div>
-              <div>    <span style={{ color: '#c678dd' }}>return</span> stripe.refund(amount)</div>
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              <strong style={{ color: '#d4d4d8' }}>2. Generate an API Key:</strong><br/>
+              Register your new agent in the Agent Registry. Q will generate a unique, secure API Key for that agent.
             </div>
 
-            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>
-              When the agent tries to call <span style={{ color: 'var(--accent)' }}>refund_customer</span>, Q intercepts the execution, pauses the python script locally, and sends a real-time <span style={{ color: '#EF4444', fontWeight: 'bold' }}>Human-in-the-Loop</span> alert to your Q Dashboard. The agent is frozen until you click Approve.
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              <strong style={{ color: '#d4d4d8' }}>3. Install the SDK:</strong><br/>
+              On your laptop or server, open your terminal and run <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span>.
+            </div>
+
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              <strong style={{ color: '#d4d4d8' }}>4. Decorate & Govern:</strong><br/>
+              In your Python code, initialize Q with your API key and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool (like refunding a user or dropping a database). Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
             </div>
             
             <br />
