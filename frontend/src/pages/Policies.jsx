@@ -81,10 +81,21 @@ export const Policies = () => {
 
       <div className="bg-q-panel border border-q-border rounded-xl overflow-hidden">
         {policies.length === 0 ? (
-          <div className="p-12 text-center text-q-muted">
-            <Shield className="mx-auto h-12 w-12 opacity-20 mb-4" />
-            <p>No active security policies.</p>
-            <p className="text-sm mt-1">Agents are operating without strict boundaries.</p>
+          <div className="p-12 flex flex-col items-center justify-center min-h-[300px] text-center">
+            <div className="w-16 h-16 rounded-full bg-q-glow/10 flex items-center justify-center mb-6 border border-q-glow/20">
+              <Shield className="h-8 w-8 text-q-glow" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-3">Welcome to Q! Let's get started.</h2>
+            <p className="text-q-muted max-w-md mb-8 text-lg">
+              Before your agents run wild, let's establish some ground rules. What tool or action do you want to regulate first?
+            </p>
+            <button 
+              onClick={() => setShowModal(true)}
+              className="bg-q-glow text-black hover:bg-q-glow/90 px-6 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(0,255,157,0.3)] flex items-center gap-2"
+            >
+              <Plus size={20} />
+              Create Your First Policy
+            </button>
           </div>
         ) : (
           <table className="w-full text-left border-collapse">

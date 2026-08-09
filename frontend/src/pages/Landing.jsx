@@ -125,21 +125,21 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '700px', color: '#a1a1aa' }}>
-            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>THE 30-SECOND QUICKSTART:</div>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS (3-STEP SETUP):</div>
             
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>Step 1: Get your API Key</strong><br/>
-              Sign up for an account, go to the <strong>Agent Registry</strong>, and create a new agent. We will give you a secure API key.
+              <strong style={{ color: '#d4d4d8' }}>Step 1: Define your Policies</strong><br/>
+              Sign up and go to your <strong>Policy Engine</strong>. Tell Q what you want to regulate—for example, require human approval for "refund_customer" or outright block "drop_database".
             </div>
             
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>Step 2: Install Q</strong><br/>
-              Open your computer's terminal and type: <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span>
+              <strong style={{ color: '#d4d4d8' }}>Step 2: Install & Initialize</strong><br/>
+              Run <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span> and initialize Q in your codebase with your API key.
             </div>
 
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>Step 3: Run the Magic Test Script</strong><br/>
-              Copy the code below, paste your new API key into it, and run it. The code will attempt to "delete" files, but Q will instantly freeze it and send an alert to your dashboard waiting for your approval!
+              <strong style={{ color: '#d4d4d8' }}>Step 3: Start Regulating</strong><br/>
+              Run your agents as normal! Q will instantly enforce your policies, pause dangerous actions locally, and stream real-time alerts to your dashboard.
             </div>
             
             <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '0.5rem 0 1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
