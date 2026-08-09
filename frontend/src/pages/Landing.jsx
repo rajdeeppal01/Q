@@ -125,26 +125,21 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '700px', color: '#a1a1aa' }}>
-            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW TO GET STARTED:</div>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>THE 30-SECOND QUICKSTART:</div>
             
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>1. Create an Account:</strong><br/>
-              Sign up for Q and access your secure Mission Control dashboard.
+              <strong style={{ color: '#d4d4d8' }}>Step 1: Get your API Key</strong><br/>
+              Sign up for an account, go to the <strong>Agent Registry</strong>, and create a new agent. We will give you a secure API key.
             </div>
             
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>2. Generate an API Key:</strong><br/>
-              Register your new agent in the Agent Registry. Q will generate a unique, secure API Key for that agent.
+              <strong style={{ color: '#d4d4d8' }}>Step 2: Install Q</strong><br/>
+              Open your computer's terminal and type: <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span>
             </div>
 
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>3. Install the SDK:</strong><br/>
-              On your laptop or server, open your terminal and run <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span>.
-            </div>
-
-            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>4. Decorate & Govern:</strong><br/>
-              In your Python code, initialize Q with your API key and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool. Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
+              <strong style={{ color: '#d4d4d8' }}>Step 3: Run the Magic Test Script</strong><br/>
+              Copy the code below, paste your new API key into it, and run it. The code will attempt to "delete" files, but Q will instantly freeze it and send an alert to your dashboard waiting for your approval!
             </div>
             
             <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '0.5rem 0 1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
