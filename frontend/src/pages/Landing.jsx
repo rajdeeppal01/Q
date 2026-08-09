@@ -38,8 +38,8 @@ export default function Landing() {
         <div>
           I built <strong style={{ color: '#ffffff', fontWeight: 600 }}>Q</strong>,
         </div>
-        <div>the next-gen operating</div>
-        <div>system for AI agents.</div>
+        <div>the governance and security</div>
+        <div>platform for autonomous AI.</div>
       </div>
 
       <div style={{ marginBottom: '2.5rem' }}>
@@ -47,11 +47,11 @@ export default function Landing() {
       </div>
 
       <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '2.5rem' }}>
-        <span className="term-link">about</span>
-        <span className="term-link">jobs</span>
-        <span className="term-link">who</span>
+        <span className="term-link">features/</span>
+        <span className="term-link">policies/</span>
+        <span className="term-link">telemetry/</span>
         <br />
-        <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; login</span>
+        <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./start_dashboard</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
