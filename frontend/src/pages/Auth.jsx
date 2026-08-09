@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { api } from '../api/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Auth = ({ onLogin }) => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const [isLogin, setIsLogin] = useState(location.state?.isSignup ? false : true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   

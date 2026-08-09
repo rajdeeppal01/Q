@@ -59,7 +59,7 @@ export default function Landing() {
             <span className="term-link" onClick={() => setView('docs')}>docs/</span>
             <br />
             <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./login</span>
-            <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./signup</span>
+            <span className="term-link" onClick={() => navigate('/login', { state: { isSignup: true } })} style={{ fontWeight: 600 }}>&gt; ./signup</span>
           </div>
         </>
       )}
