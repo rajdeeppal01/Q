@@ -12,6 +12,7 @@ import LiveMonitor from './pages/LiveMonitor';
 import Compliance from './pages/Compliance';
 import AuditTrail from './pages/AuditTrail';
 import Alerts from './pages/Alerts';
+import SetupGuide from './pages/SetupGuide';
 import { api } from './api/client';
 
 
@@ -22,6 +23,7 @@ function AppLayout({ onLogout }) {
       <main className="main-content">
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/guide" element={<SetupGuide />} />
           <Route path="/policies" element={<Policies />} />
           <Route path="/agents" element={<AgentRegistry />} />
           <Route path="/agents/:id" element={<AgentDetail />} />

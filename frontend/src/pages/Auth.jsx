@@ -25,7 +25,7 @@ export const Auth = ({ onLogin }) => {
         const data = await api.login(formData.email, formData.password);
         localStorage.setItem('q_access_token', data.access_token);
         onLogin(data.user);
-        navigate('/policies');
+        navigate('/dashboard');
       } else {
         const data = await api.register({
           email: formData.email,
@@ -34,7 +34,7 @@ export const Auth = ({ onLogin }) => {
         });
         localStorage.setItem('q_access_token', data.access_token);
         onLogin(data.user);
-        navigate('/policies');
+        navigate('/guide');
       }
     } catch (err) {
       setError(err.message || 'Authentication failed. Please check your credentials.');
