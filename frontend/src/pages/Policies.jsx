@@ -84,12 +84,9 @@ function CreatePolicyModal({ onClose, onCreated }) {
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--accent-glow)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-accent)' }}>
-              <Shield size={20} color="var(--accent)" />
-            </div>
             <div>
               <h3 style={{ fontWeight: 700 }}>Create Security Policy</h3>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Define a new governance rule</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Define a new governance policy</p>
             </div>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
@@ -158,7 +155,7 @@ function CreatePolicyModal({ onClose, onCreated }) {
                 </span>
               ) : (
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Plus size={14} /> Deploy Rule
+                  <Plus size={14} /> Deploy Policy
                 </span>
               )}
             </button>
