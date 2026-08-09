@@ -56,7 +56,7 @@ agent = QAgent(api_key=<span style={{ color: '#98c379' }}>"q-sk-..."</span>)<br/
 <span style={{ color: '#5c6370', fontStyle: 'italic' }}># Add the decorator to govern any tool/function</span><br/>
 <span style={{ color: '#61afef' }}>@require_approval</span>(agent)<br/>
 <span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#e5c07b' }}>refund_user</span>(user_id, amount):<br/>
-    <span style={{ color: '#c678dd' }}>return</span> <span style={{ color: '#98c379' }}>f"Refunded ${amount}"</span><br/><br/>
+    <span style={{ color: '#c678dd' }}>return</span> <span style={{ color: '#98c379' }}>f"Refunded ${'{amount}'}"</span><br/><br/>
 <span style={{ color: '#5c6370', fontStyle: 'italic' }}># Call the function (Q will intercept it and send it to your Live Monitor!)</span><br/>
 refund_user(<span style={{ color: '#98c379' }}>"usr_123"</span>, <span style={{ color: '#d19a66' }}>50.00</span>)
               </pre>
