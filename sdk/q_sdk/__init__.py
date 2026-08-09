@@ -6,7 +6,7 @@ Usage:
 
     agent = QAgent(
         name="my-agent",
-        q_url="http://localhost:8000",
+        q_url="https://q-f8z0.onrender.com",
         api_key="q_sk_..."
     )
 
