@@ -1,21 +1,27 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [view, setView] = useState('home');
 
   return (
     <div style={{
       minHeight: '100vh',
       color: '#d4d4d8',
       fontFamily: 'var(--font-mono)',
-      fontSize: '1.1rem',
-      padding: '10vh 15vw 15vh 15vw',
+      fontSize: '1.2rem',
+      padding: '25vh 20vw',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'flex-start'
     }}>
       <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
         .term-link {
           color: var(--accent);
           cursor: pointer;
@@ -26,96 +32,128 @@ export default function Landing() {
           opacity: 0.8;
           text-decoration: underline;
         }
-        .section-title {
-          color: #ffffff;
-          font-weight: 700;
-          margin-bottom: 0.75rem;
-          margin-top: 3rem;
-          font-size: 1.25rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
+        .feature-item {
+          margin-bottom: 1rem;
+          color: #a1a1aa;
+          line-height: 1.5;
         }
-        .section-title::before {
-          content: '>';
-          color: var(--accent);
+        .feature-title {
+          color: #ffffff;
+          font-weight: 600;
         }
       `}</style>
 
-      {/* Hero Header */}
-      <div style={{ lineHeight: '1.4', marginBottom: '1rem', fontSize: '1.5rem' }}>
+      <div style={{ lineHeight: '1.6', marginBottom: '2.5rem' }}>
         <div>
-          <strong style={{ color: '#ffffff', fontWeight: 800 }}>Q</strong> — The Governance and Security Platform
+          I built <strong style={{ color: '#ffffff', fontWeight: 600 }}>Q</strong>,
         </div>
-        <div>for Autonomous AI Agents.</div>
-      </div>
-      <div style={{ color: '#a1a1aa', fontStyle: 'italic', marginBottom: '2rem' }}>
-        Total autonomy, with total control.
+        <div>the governance and security</div>
+        <div>platform for autonomous AI agents.</div>
       </div>
 
-      {/* The Problem */}
-      <div className="section-title">THE_PROBLEM.md</div>
-      <div style={{ lineHeight: '1.6', color: '#a1a1aa', maxWidth: '700px' }}>
-        We unleashed autonomous AI agents, but quickly realized they have no brakes. When an LLM is connected to your database, your Stripe account, or your AWS infrastructure, a single prompt injection or hallucination can cause catastrophic damage. Agents can exfiltrate data, delete databases, and run up massive cloud bills in seconds.
-      </div>
+      {view === 'home' && (
+        <>
+          <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '2.5rem' }}>
+            <span className="term-link" onClick={() => setView('meet_q')}>meet_q/</span>
+            <span className="term-link" onClick={() => setView('features')}>features/</span>
+            <span className="term-link" onClick={() => setView('docs')}>docs/</span>
+            <br />
+            <span className="term-link" onClick={() => navigate('/login', { state: { isSignup: true } })} style={{ fontWeight: 600 }}>&gt; ./create_account</span>
+            <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./login</span>
+          </div>
+        </>
+      )}
 
-      {/* The Solution */}
-      <div className="section-title">THE_SOLUTION.md</div>
-      <div style={{ lineHeight: '1.6', color: '#a1a1aa', maxWidth: '700px' }}>
-        Q is the ultimate kill switch and governance layer. It acts as a security middleware (like Datadog, but for AI actions). You simply drop our lightweight Python SDK into your agent's codebase, and Q automatically intercepts every tool call and LLM decision, enforcing your security policies <em>before</em> the action is ever executed.
-      </div>
+      {view === 'meet_q' && (
+        <>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat meet_q.md
+          </div>
 
-      {/* How it Works */}
-      <div className="section-title">HOW_IT_WORKS.py</div>
-      <div style={{ lineHeight: '1.6', color: '#a1a1aa', maxWidth: '700px', width: '100%' }}>
-        <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: '#a1a1aa', marginTop: '1rem', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
-          <div style={{ color: '#8b8b99', marginBottom: '1rem' }}># 1. Install the SDK via pip: $ pip install q-agent-sdk</div>
-          <div><span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval</div>
-          <br />
-          <div style={{ color: '#8b8b99', marginBottom: '0.25rem' }}># 2. Initialize with your API Key</div>
-          <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(name=<span style={{ color: '#98c379' }}>"support-bot"</span>, api_key=<span style={{ color: '#98c379' }}>"q_sk_..."</span>)</div>
-          <br />
-          <div style={{ color: '#8b8b99', marginBottom: '0.25rem' }}># 3. Decorate your dangerous tools</div>
-          <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"critical"</span>)</div>
-          <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Refunding money"</span>)</div>
-          <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>refund_customer</span>(amount):</div>
-          <div>    <span style={{ color: '#c678dd' }}>return</span> stripe.refund(amount)</div>
-        </div>
-        
-        <div style={{ marginTop: '1.5rem' }}>
-          When your agent runs and tries to call <span style={{ color: 'var(--accent)' }}>refund_customer</span>, the Q SDK immediately pauses the python script on your server and sends a real-time <span style={{ color: '#EF4444', fontWeight: 'bold' }}>Human-in-the-Loop</span> alert to your Q Mission Control dashboard. The agent is frozen indefinitely until you click "Approve".
-        </div>
-      </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px', color: '#a1a1aa' }}>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>THE PROBLEM:</div>
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              We unleashed autonomous AI agents, but quickly realized they have no brakes. When an LLM is connected to your database, your Stripe account, or your AWS infrastructure, a single prompt injection or hallucination can cause catastrophic damage. Agents can exfiltrate data, delete databases, and run up massive cloud bills in seconds.
+            </div>
+            
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem', marginTop: '1rem' }}>THE SOLUTION:</div>
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
+              Q was built to change that. It is the ultimate kill switch and governance layer. It acts as a security middleware (like Datadog, but for AI actions)—giving you the power to intercept rogue actions, enforce programmatic guardrails, and audit every move your agents make in real-time.
+            </div>
+            <div style={{ color: '#d4d4d8', fontStyle: 'italic', marginBottom: '1rem', marginTop: '0.5rem' }}>
+              Total autonomy, with total control.
+            </div>
+            <br />
+            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+          </div>
+        </>
+      )}
 
-      {/* Features */}
-      <div className="section-title">FEATURES.txt</div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '700px' }}>
-        <div>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>[+] Human-in-the-Loop:</span><br />
-          <span style={{ color: '#a1a1aa', fontSize: '0.95rem' }}>Pause autonomous agents before critical actions for manual human approval.</span>
-        </div>
-        <div>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>[+] Anomaly Detection:</span><br />
-          <span style={{ color: '#a1a1aa', fontSize: '0.95rem' }}>Instantly detect prompt injections, data exfiltration, and tool abuse.</span>
-        </div>
-        <div>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>[+] Policy Engine:</span><br />
-          <span style={{ color: '#a1a1aa', fontSize: '0.95rem' }}>Enforce strict, programmatic guardrails and rate limits over LLM tool usage.</span>
-        </div>
-        <div>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>[+] Compliance Tracking:</span><br />
-          <span style={{ color: '#a1a1aa', fontSize: '0.95rem' }}>Real-time auditing mapped to NIST AI RMF & OWASP Agentic Top 10 standards.</span>
-        </div>
-      </div>
+      {view === 'features' && (
+        <>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat features.md
+          </div>
 
-      {/* CTA */}
-      <div style={{ marginTop: '4rem', padding: '1.5rem', border: '1px solid var(--accent)', borderRadius: '8px', background: 'rgba(0, 240, 255, 0.05)', width: '100%', maxWidth: '700px' }}>
-        <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '1rem' }}>SYSTEM_READY // Awaiting command:</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <span className="term-link" onClick={() => navigate('/login', { state: { isSignup: true } })} style={{ fontWeight: 600, fontSize: '1.1rem' }}>&gt; ./create_account</span>
-          <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600, fontSize: '1.1rem' }}>&gt; ./login</span>
-        </div>
-      </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px' }}>
+            <div className="feature-item">
+              <span className="feature-title">Human-in-the-Loop</span><br />
+              Pause autonomous agents before critical actions for manual human approval.
+            </div>
+            <div className="feature-item">
+              <span className="feature-title">Anomaly Detection</span><br />
+              Instantly detect prompt injections, data exfiltration, and tool abuse.
+            </div>
+            <div className="feature-item">
+              <span className="feature-title">Policy Engine</span><br />
+              Enforce strict, programmatic guardrails and rate limits over LLM tool usage.
+            </div>
+            <div className="feature-item">
+              <span className="feature-title">Compliance Tracking</span><br />
+              Real-time auditing mapped to NIST AI RMF & OWASP Agentic Top 10 standards.
+            </div>
+            <br />
+            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+          </div>
+        </>
+      )}
+
+      {view === 'docs' && (
+        <>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat how_it_works.md
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '700px', color: '#a1a1aa' }}>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS:</div>
+            
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.5 }}>
+              Q acts as a middleware interceptor for your agents. You just install the SDK and decorate your dangerous tools.
+            </div>
+            
+            <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              <div style={{ color: '#8b8b99', marginBottom: '1rem' }}># 1. Install the SDK via pip: $ pip install q-agent-sdk</div>
+              <div><span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval</div>
+              <br />
+              <div style={{ color: '#8b8b99', marginBottom: '0.25rem' }}># 2. Initialize with your API Key</div>
+              <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(name=<span style={{ color: '#98c379' }}>"support-bot"</span>, api_key=<span style={{ color: '#98c379' }}>"q_sk_..."</span>)</div>
+              <br />
+              <div style={{ color: '#8b8b99', marginBottom: '0.25rem' }}># 3. Decorate your dangerous tools</div>
+              <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"critical"</span>)</div>
+              <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Refunding money"</span>)</div>
+              <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>refund_customer</span>(amount):</div>
+              <div>    <span style={{ color: '#c678dd' }}>return</span> stripe.refund(amount)</div>
+            </div>
+
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>
+              When the agent tries to call <span style={{ color: 'var(--accent)' }}>refund_customer</span>, Q intercepts the execution, pauses the python script locally, and sends a real-time <span style={{ color: '#EF4444', fontWeight: 'bold' }}>Human-in-the-Loop</span> alert to your Q Dashboard. The agent is frozen until you click Approve.
+            </div>
+            
+            <br />
+            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+          </div>
+        </>
+      )}
 
     </div>
   );
