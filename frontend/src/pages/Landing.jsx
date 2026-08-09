@@ -50,19 +50,18 @@ export default function Landing() {
           I built <strong style={{ color: '#ffffff', fontWeight: 600 }}>Q</strong>,
         </div>
         <div>the governance and security</div>
-        <div>platform for autonomous AI.</div>
+        <div>platform for autonomous AI agents.</div>
       </div>
 
       {view === 'home' && (
         <>
           <div style={{ marginBottom: '2.5rem' }}>
-            <span style={{ color: '#8b8b99' }}>/dev/agents &gt;</span> ls
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> ls
           </div>
 
           <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '2.5rem' }}>
             <span className="term-link" onClick={() => setView('features')}>features/</span>
-            <span className="term-link">policies/</span>
-            <span className="term-link">docs/</span>
+            <span className="term-link" onClick={() => setView('docs')}>docs/</span>
             <br />
             <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./login</span>
             <span className="term-link" onClick={() => navigate('/login')} style={{ fontWeight: 600 }}>&gt; ./signup</span>
@@ -73,24 +72,24 @@ export default function Landing() {
       {view === 'features' && (
         <>
           <div style={{ marginBottom: '2.5rem' }}>
-            <span style={{ color: '#8b8b99' }}>/dev/agents &gt;</span> cat features.md
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat features.md
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px' }}>
             <div className="feature-item">
-              <span className="feature-title">[🛡] Human-in-the-Loop</span><br />
+              <span className="feature-title">Human-in-the-Loop</span><br />
               Pause autonomous agents before critical actions for manual human approval.
             </div>
             <div className="feature-item">
-              <span className="feature-title">[🔬] Anomaly Detection</span><br />
+              <span className="feature-title">Anomaly Detection</span><br />
               Instantly detect prompt injections, data exfiltration, and tool abuse.
             </div>
             <div className="feature-item">
-              <span className="feature-title">[⚙] Policy Engine</span><br />
+              <span className="feature-title">Policy Engine</span><br />
               Enforce strict, programmatic guardrails and rate limits over LLM tool usage.
             </div>
             <div className="feature-item">
-              <span className="feature-title">[📋] Compliance Tracking</span><br />
+              <span className="feature-title">Compliance Tracking</span><br />
               Real-time auditing mapped to NIST AI RMF & OWASP Agentic Top 10 standards.
             </div>
             <br />
@@ -99,8 +98,27 @@ export default function Landing() {
         </>
       )}
 
+      {view === 'docs' && (
+        <>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> cat how_it_works.md
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px', color: '#a1a1aa' }}>
+            <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS:</div>
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>1. <span style={{ color: '#d4d4d8' }}>Install SDK:</span> Import the Q SDK into your agent's codebase.</div>
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>2. <span style={{ color: '#d4d4d8' }}>Initialize:</span> Authenticate with your Q API Key.</div>
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>3. <span style={{ color: '#d4d4d8' }}>Intercept:</span> Q evaluates all LLM tool calls against active policies.</div>
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>4. <span style={{ color: '#d4d4d8' }}>Govern:</span> If a policy is violated (e.g., executing a dangerous command), Q pauses the agent and sends a Human-in-the-Loop alert.</div>
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>5. <span style={{ color: '#d4d4d8' }}>Monitor:</span> All agent telemetry is streamed to the dashboard for real-time compliance auditing.</div>
+            <br />
+            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+          </div>
+        </>
+      )}
+
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ color: '#8b8b99' }}>/dev/agents &gt;</span>
+        <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span>
         <span style={{ 
           display: 'inline-block', 
           width: '12px', 
