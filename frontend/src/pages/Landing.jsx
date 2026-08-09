@@ -125,9 +125,6 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '700px', color: '#a1a1aa' }}>
-            <div style={{ padding: '1rem', background: 'rgba(0,229,255,0.05)', border: '1px solid rgba(0,229,255,0.2)', borderRadius: 8, marginBottom: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              <strong style={{ color: 'var(--accent)' }}>Visitor Note:</strong> Q is currently a frontend prototype built for portfolio demonstration. The <code style={{ fontFamily: 'var(--font-mono)' }}>q-agent-sdk</code> package is illustrative and has not been published to PyPI. You can explore the entire dashboard and create policies without needing to run an actual agent!
-            </div>
             
             <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS (3-STEP SETUP):</div>
             

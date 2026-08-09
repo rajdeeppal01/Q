@@ -17,10 +17,6 @@ export default function SetupGuide() {
         </p>
       </div>
 
-      <div style={{ padding: '1rem', background: 'rgba(0,229,255,0.05)', border: '1px solid rgba(0,229,255,0.2)', borderRadius: 8, marginBottom: '2rem', color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5 }}>
-        <strong style={{ color: 'var(--accent)' }}>Prototype Notice:</strong> Q is a frontend demonstration. The <code style={{ fontFamily: 'var(--font-mono)' }}>q_sdk</code> Python package is purely illustrative and does not exist on PyPI. You do <strong>not</strong> need to actually run an agent to explore the dashboard. Just create a fake policy to see how it works!
-      </div>
-
       <motion.div variants={container} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         
         {/* Step 1 */}
@@ -52,7 +48,7 @@ export default function SetupGuide() {
             
             <div style={{ background: '#09090b', padding: '1rem', borderRadius: 8, border: '1px solid #27272a', overflowX: 'auto', fontSize: '0.8125rem', fontFamily: 'var(--font-mono)' }}>
               <pre style={{ margin: 0, color: '#a1a1aa' }}>
-<span style={{ color: '#8b8b99', fontStyle: 'italic' }}># 1. Install the SDK in your terminal: pip install q_sdk</span><br/>
+<span style={{ color: '#8b8b99', fontStyle: 'italic' }}># 1. Install the SDK: pip install git+https://github.com/rajdeeppal01/Q.git#subdirectory=sdk</span><br/>
 <span style={{ color: '#8b8b99', fontStyle: 'italic' }}># 2. Save this code as test_agent.py and run it: python test_agent.py</span><br/><br/>
 <span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval<br/><br/>
 <span style={{ color: '#5c6370', fontStyle: 'italic' }}># Initialize with your API key from Step 1</span><br/>
