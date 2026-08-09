@@ -78,7 +78,7 @@
   --shadow-glow-strong: 0 0 40px rgba(0, 229, 255, 0.2);
 
   /* Typography */
-  --font-ui: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-ui: 'JetBrains Mono', 'Fira Code', monospace;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Spacing */
