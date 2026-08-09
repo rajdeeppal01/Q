@@ -68,6 +68,10 @@ export const api = {
   
   // Alerts
   getAlerts: () => qFetch('/alerts/'),
+  updateAlertStatus: (id, status) => qFetch(`/alerts/${id}/status`, {
+    method: 'PUT',
+    body: JSON.stringify({ status }),
+  }),
   
   // Approvals
   getApprovals: () => qFetch('/approvals/'),

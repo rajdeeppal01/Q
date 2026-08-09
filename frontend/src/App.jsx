@@ -7,9 +7,11 @@ import { Policies } from './pages/Policies';
 import { Approvals } from './pages/Approvals';
 import { Auth } from './pages/Auth';
 import AgentRegistry from './pages/AgentRegistry';
+import AgentDetail from './pages/AgentDetail';
 import LiveMonitor from './pages/LiveMonitor';
 import Compliance from './pages/Compliance';
 import AuditTrail from './pages/AuditTrail';
+import Alerts from './pages/Alerts';
 import { api } from './api/client';
 
 
@@ -22,11 +24,12 @@ function AppLayout({ onLogout }) {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/policies" element={<Policies />} />
           <Route path="/agents" element={<AgentRegistry />} />
+          <Route path="/agents/:id" element={<AgentDetail />} />
           <Route path="/monitor" element={<LiveMonitor />} />
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/audit" element={<AuditTrail />} />
           <Route path="/compliance" element={<Compliance />} />
-          <Route path="/alerts" element={<Placeholder title="Alerts" />} />
+          <Route path="/alerts" element={<Alerts />} />
         </Routes>
       </main>
     </div>

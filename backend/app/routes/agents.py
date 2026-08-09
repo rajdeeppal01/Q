@@ -198,3 +198,113 @@ def agent_heartbeat(
     agent.last_heartbeat = datetime.now(timezone.utc)
     db.commit()
     return {"status": "alive"}
+
+
+@router.get("/{agent_id}/events")
+def get_agent_events(
+    agent_id: str,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    """Get the most recent events for a specific agent (for the Agent Detail timeline)."""
+    from app.models.event import Event
+    agent = db.execute(
+        select(Agent).where(Agent.id == agent_id, Agent.owner_id == current_user.id)
+    ).scalars().first()
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+
+    events = db.execute(
+        select(Event).where(Event.agent_id == agent_id)
+        .order_by(Event.created_at.desc())
+        .limit(limit)
+    ).scalars().all()
+
+    return [
+        {
+            "id": e.id,
+            "event_type": e.event_type,
+            "tool_name": e.tool_name,
+            "risk_level": e.risk_level,
+            "policy_passed": e.policy_passed,
+            "latency_ms": e.latency_ms,
+            "trace_id": e.trace_id,
+            "error_message": e.error_message,
+            "created_at": e.created_at.isoformat() if e.created_at else None,
+        }
+        for e in events
+    ]
+
+
+@router.get("/{agent_id}/stats")
+def get_agent_stats(
+    agent_id: str,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    """Get aggregated KPI stats for a specific agent."""
+    from app.models.event import Event
+    from app.models.alert import Alert
+    from sqlalchemy import func
+
+    agent = db.execute(
+        select(Agent).where(Agent.id == agent_id, Agent.owner_id == current_user.id)
+    ).scalars().first()
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+
+    total_events = db.execute(
+        select(func.count(Event.id)).where(Event.agent_id == agent_id)
+    ).scalar() or 0
+
+    blocked = db.execute(
+        select(func.count(Event.id)).where(
+            Event.agent_id == agent_id, Event.policy_passed == False
+        )
+    ).scalar() or 0
+
+    critical = db.execute(
+        select(func.count(Event.id)).where(
+            Event.agent_id == agent_id, Event.risk_level == "critical"
+        )
+    ).scalar() or 0
+
+    open_alerts = db.execute(
+        select(func.count(Alert.id)).where(
+            Alert.agent_id == agent_id, Alert.status == "open"
+        )
+    ).scalar() or 0
+
+    avg_latency = db.execute(
+        select(func.avg(Event.latency_ms)).where(
+            Event.agent_id == agent_id, Event.latency_ms != None
+        )
+    ).scalar()
+
+    # Tool usage breakdown
+    tool_counts = db.execute(
+        select(Event.tool_name, func.count(Event.id).label("count"))
+        .where(Event.agent_id == agent_id, Event.tool_name != None)
+        .group_by(Event.tool_name)
+        .order_by(func.count(Event.id).desc())
+        .limit(8)
+    ).all()
+
+    # Risk breakdown
+    risk_counts = db.execute(
+        select(Event.risk_level, func.count(Event.id).label("count"))
+        .where(Event.agent_id == agent_id)
+        .group_by(Event.risk_level)
+    ).all()
+
+    return {
+        "total_events": total_events,
+        "blocked_events": blocked,
+        "critical_events": critical,
+        "open_alerts": open_alerts,
+        "avg_latency_ms": round(avg_latency, 1) if avg_latency else None,
+        "tool_usage": [{"tool": r[0], "count": r[1]} for r in tool_counts],
+        "risk_breakdown": {r[0]: r[1] for r in risk_counts},
+    }
+

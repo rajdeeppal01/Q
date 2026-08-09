@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import {
   Bot, Plus, RefreshCw, Key, Pause, Play, Ban, Shield,
@@ -285,6 +286,7 @@ function RegisterModal({ onClose, onRegistered }) {
 function AgentCard({ agent, onStatusChange, onRotateKey }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const navigate = useNavigate();
 
   const status = STATUS_CONFIG[agent.status] || STATUS_CONFIG.active;
   const risk = RISK_CONFIG[agent.risk_level] || RISK_CONFIG.low;
@@ -318,9 +320,10 @@ function AgentCard({ agent, onStatusChange, onRotateKey }) {
     <motion.div
       variants={card}
       className="glass-card"
-      style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', opacity: updating ? 0.6 : 1 }}
+      style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', opacity: updating ? 0.6 : 1, cursor: 'pointer' }}
       whileHover={{ y: -2, boxShadow: `0 8px 32px rgba(0,229,255,0.12)` }}
       transition={{ duration: 0.2 }}
+      onClick={() => navigate(`/agents/${agent.id}`)}
     >
       {/* Top row */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -347,7 +350,7 @@ function AgentCard({ agent, onStatusChange, onRotateKey }) {
         </div>
 
         {/* Actions menu */}
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }} onClick={e => e.stopPropagation()}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             style={{

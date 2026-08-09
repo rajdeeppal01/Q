@@ -18,6 +18,7 @@ from app.models.alert import Alert
 from app.models.identity import AgentIdentity
 from app.websocket.manager import manager
 from app.services.policy_engine import policy_engine, EventContext, apply_policy_verdict
+from app.services.anomaly import anomaly_detector
 
 logger = logging.getLogger("q.events")
 router = APIRouter(prefix="/events", tags=["Events"])
@@ -38,60 +39,36 @@ class TelemetryEvent(BaseModel):
     error_message: Optional[str] = None
 
 
-# --- Anomaly Detection (Phase 4 Logic) ---
-
-def check_owasp_patterns(event: TelemetryEvent) -> Optional[str]:
-    """Basic pattern matching for OWASP Top 10 for LLMs."""
-    if not event.input_data:
-        return None
-        
-    input_str = str(event.input_data).lower()
-    
-    # LLM01: Prompt Injections
-    if any(phrase in input_str for phrase in ["ignore previous", "bypass", "system prompt", "you are now"]):
-        return "Possible prompt injection detected (OWASP LLM01)"
-        
-    # LLM06: Sensitive Information Disclosure
-    if any(phrase in input_str for phrase in ["password", "secret", "api_key", "credentials"]):
-        return "Possible sensitive data exposure (OWASP LLM06)"
-        
-    return None
-
+# --- Anomaly Detection (Phase 4) ---
 
 def process_event_background(event_data: dict, agent_id: str, db: Session):
-    """Background task to analyze event and trigger alerts if anomalous."""
+    """Background task: runs the full statistical + OWASP anomaly detector, persists alerts."""
     try:
         event_obj = TelemetryEvent(**event_data)
-        
-        # 1. Pattern Matching
-        anomaly = check_owasp_patterns(event_obj)
-        
-        # 2. Risk Level Thresholds
-        if event_obj.risk_level in ["high", "critical"] and event_obj.event_type == "error":
-            anomaly = f"High risk operation '{event_obj.tool_name}' failed."
-            
-        # 3. Generate Alert if Anomaly Detected
-        if anomaly:
+
+        anomalies = anomaly_detector.analyze(
+            agent_id=agent_id,
+            event_type=event_obj.event_type,
+            tool_name=event_obj.tool_name,
+            risk_level=event_obj.risk_level,
+            input_data=event_obj.input_data,
+        )
+
+        for result in anomalies:
             alert = Alert(
                 agent_id=agent_id,
-                alert_type="anomaly_detected",
-                severity="high" if event_obj.risk_level == "critical" else "medium",
-                message=anomaly,
-                context=event_data,
-                status="open"
+                alert_type=result.owasp_id or result.anomaly_type,
+                severity=result.severity,
+                message=result.message,
+                context={**event_data, "evidence": result.evidence, "anomaly_type": result.anomaly_type},
+                status="open",
             )
             db.add(alert)
+
+        if anomalies:
             db.commit()
-            
-            # Broadcast alert to WebSockets
-            import asyncio
-            asyncio.create_task(manager.broadcast({
-                "type": "alert",
-                "agent_id": agent_id,
-                "message": anomaly,
-                "severity": alert.severity
-            }))
-            
+            logger.warning(f"[Anomaly] {len(anomalies)} anomalies detected for agent {agent_id}")
+
     except Exception as e:
         logger.error(f"Error in background event processing: {e}")
 
