@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { api } from '../api/client';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, Key, User as UserIcon, Shield } from 'lucide-react';
 
 export const Auth = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -44,122 +43,136 @@ export const Auth = ({ onLogin }) => {
   };
 
   return (
-    <div className="auth-layout">
-      {/* Background glow effects - handled via inline styles for specific positioning without Tailwind */}
-      <div style={{
-        position: 'absolute', top: '-10%', left: '-10%', width: '50%', height: '50%', 
-        borderRadius: '50%', background: 'rgba(0, 229, 255, 0.05)', filter: 'blur(120px)', pointerEvents: 'none'
-      }}></div>
-      <div style={{
-        position: 'absolute', bottom: '-10%', right: '-10%', width: '50%', height: '50%', 
-        borderRadius: '50%', background: 'rgba(168, 85, 247, 0.05)', filter: 'blur(120px)', pointerEvents: 'none'
-      }}></div>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#18181a',
+      backgroundImage: 'radial-gradient(circle at 80% -10%, rgba(0, 229, 255, 0.5) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%)',
+      color: '#d4d4d8',
+      fontFamily: 'var(--font-mono)',
+      fontSize: '1.2rem',
+      padding: '25vh 20vw',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start'
+    }}>
+      <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .term-input {
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid transparent;
+          color: var(--accent);
+          font-family: var(--font-mono);
+          font-size: 1.2rem;
+          outline: none;
+          width: 100%;
+          padding: 0.2rem 0;
+          transition: border-color 0.2s;
+        }
+        .term-input:focus {
+          border-bottom: 1px solid var(--accent);
+        }
+        .term-input::placeholder {
+          color: #555566;
+        }
+        .term-btn {
+          background: transparent;
+          border: none;
+          color: var(--accent);
+          font-family: var(--font-mono);
+          font-size: 1.2rem;
+          cursor: pointer;
+          padding: 0;
+          text-decoration: underline;
+        }
+        .term-btn:hover {
+          opacity: 0.8;
+        }
+        .term-label {
+          width: 130px;
+          color: #a1a1aa;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+        }
+      `}</style>
 
-      <div className="auth-card animate-fade-in">
-        <div className="auth-header">
-          <div className="auth-logo">
-            <span>Q</span>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> {isLogin ? './login' : './signup'}
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem', width: '100%', maxWidth: '450px' }}>
+        {!isLogin && (
+          <div style={{ display: 'flex' }}>
+            <span className="term-label">Name:</span>
+            <input 
+              type="text" 
+              className="term-input" 
+              placeholder="Jane Doe" 
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              required
+            />
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '4px' }}>Agent Governance</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Secure authorization required</p>
+        )}
+        <div style={{ display: 'flex' }}>
+          <span className="term-label">Email:</span>
+          <input 
+            type="email" 
+            className="term-input" 
+            placeholder="admin@company.com" 
+            value={formData.email}
+            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            required
+          />
+        </div>
+        <div style={{ display: 'flex' }}>
+          <span className="term-label">Password:</span>
+          <input 
+            type="password" 
+            className="term-input" 
+            placeholder="********" 
+            value={formData.password}
+            onChange={(e) => setFormData({...formData, password: e.target.value})}
+            required
+          />
         </div>
 
-        <div className="auth-body">
-          <div className="auth-tabs">
-            <div 
-              className={`auth-tab ${isLogin ? 'active' : ''}`}
-              onClick={() => { setIsLogin(true); setError(null); }}
-            >
-              Sign In
-            </div>
-            <div 
-              className={`auth-tab ${!isLogin ? 'active' : ''}`}
-              onClick={() => { setIsLogin(false); setError(null); }}
-            >
-              Create Account
-            </div>
+        {error && (
+          <div style={{ color: '#ef4444', marginTop: '0.5rem' }}>
+            [ERROR] {error}
           </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            {!isLogin && (
-              <div className="auth-form-group">
-                <label className="auth-label">Full Name</label>
-                <div className="auth-input-wrapper">
-                  <div className="auth-input-icon">
-                    <UserIcon size={18} />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    className="auth-input"
-                    placeholder="Jane Doe"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="auth-form-group">
-              <label className="auth-label">Email Address</label>
-              <div className="auth-input-wrapper">
-                <div className="auth-input-icon">
-                  <Mail size={18} />
-                </div>
-                <input
-                  type="email"
-                  required
-                  className="auth-input"
-                  placeholder="admin@company.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                />
-              </div>
-            </div>
-
-            <div className="auth-form-group">
-              <label className="auth-label">Password</label>
-              <div className="auth-input-wrapper">
-                <div className="auth-input-icon">
-                  <Key size={18} />
-                </div>
-                <input
-                  type="password"
-                  required
-                  className="auth-input"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                />
-              </div>
-            </div>
-
-            {error && (
-              <div className="auth-error">
-                <Shield size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                <p>{error}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="auth-btn"
-            >
-              {isLoading ? (
-                <span className="flex items-center gap-sm">
-                  <Lock size={16} style={{ animation: 'pulse-quarantine 2s infinite' }} />
-                  Authenticating...
-                </span>
-              ) : (
-                <span className="flex items-center gap-sm">
-                  <Lock size={16} />
-                  {isLogin ? 'Sign In to Mission Control' : 'Create Admin Account'}
-                </span>
-              )}
-            </button>
-          </form>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '2rem' }}>
+          <button type="submit" disabled={isLoading} className="term-btn">
+            {isLoading ? '[ Authenticating... ]' : '[ Execute ]'}
+          </button>
+          
+          <button 
+            type="button" 
+            className="term-btn" 
+            style={{ color: '#8b8b99', textDecoration: 'none' }}
+            onClick={() => { setIsLogin(!isLogin); setError(null); }}
+          >
+            {isLogin ? '&gt; switch_to_signup' : '&gt; switch_to_login'}
+          </button>
         </div>
+      </form>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span>
+        <span style={{ 
+          display: 'inline-block', 
+          width: '12px', 
+          height: '22px', 
+          backgroundColor: 'var(--accent)',
+          animation: 'blink 1s step-end infinite'
+        }} />
       </div>
     </div>
   );
