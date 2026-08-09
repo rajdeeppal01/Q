@@ -147,15 +147,25 @@ export default function Landing() {
               In your Python code, initialize Q with your API key and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool. Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
             </div>
             
-            <div style={{ background: 'var(--bg-deep)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '0.5rem 0 1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+            <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '0.5rem 0 1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              <div style={{ color: '#8b8b99', marginBottom: '1rem' }}># 1. Install SDK via terminal: pip install q-agent-sdk</div>
+              <div style={{ color: '#8b8b99', marginBottom: '0.5rem' }}># 2. Save this as test.py and run it:</div>
               <div><span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval</div>
               <br />
-              <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(name=<span style={{ color: '#98c379' }}>"support-bot"</span>, api_key=<span style={{ color: '#98c379' }}>"q_sk_..."</span>)</div>
+              <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(</div>
+              <div>    name=<span style={{ color: '#98c379' }}>"demo-agent"</span>, </div>
+              <div>    api_key=<span style={{ color: '#98c379' }}>"&lt;YOUR_API_KEY&gt;"</span>,</div>
+              <div>    q_url=<span style={{ color: '#98c379' }}>"https://q-f8z0.onrender.com"</span></div>
+              <div>)</div>
               <br />
-              <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"critical"</span>)</div>
-              <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Refunding money"</span>)</div>
-              <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>refund_customer</span>(amount):</div>
-              <div>    <span style={{ color: '#c678dd' }}>return</span> stripe.refund(amount)</div>
+              <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"high"</span>)</div>
+              <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Deleting files requires review"</span>)</div>
+              <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>delete_system_files</span>(path):</div>
+              <div>    <span style={{ color: '#56b6c2' }}>print</span>(<span style={{ color: '#98c379' }}>f"Deleting files at {'{path}'}..."</span>)</div>
+              <div>    <span style={{ color: '#c678dd' }}>return</span> <span style={{ color: '#d19a66' }}>True</span></div>
+              <br />
+              <div><span style={{ color: '#8b8b99' }}># 3. Call it! Q will intercept and pause execution</span></div>
+              <div>delete_system_files(<span style={{ color: '#98c379' }}>"/var/www/html"</span>)</div>
             </div>
             
             <br />
