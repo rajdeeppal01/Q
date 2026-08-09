@@ -3,51 +3,7 @@ import { motion } from 'framer-motion';
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer, Tooltip } from 'recharts';
 import { api } from '../api/client';
 
-// --- Static mock data for when backend returns nothing meaningful ---
-const MOCK_DATA = {
-  overall: 87,
-  timeframe_days: 30,
-  summary: {
-    total_events: 2840, total_violations: 12, high_risk_events: 48,
-    blocked_events: 7, total_agents: 6, active_agents: 5, quarantined_agents: 1,
-  },
-  nist: {
-    overall: 91,
-    controls: [
-      { id: 'GOVERN', name: 'Govern',  score: 94, description: 'Policies, accountability, HITL gates' },
-      { id: 'MAP',    name: 'Map',     score: 89, description: 'Agent registry, permission scoping' },
-      { id: 'MEASURE',name: 'Measure', score: 92, description: 'Risk scoring, anomaly metrics' },
-      { id: 'MANAGE', name: 'Manage',  score: 88, description: 'Auto-quarantine, alerts, approvals' },
-    ],
-  },
-  owasp: {
-    overall: 84,
-    controls: [
-      { id: 'ASI01', name: 'Agent Goal Hijack',              score: 90, status: 'monitored' },
-      { id: 'ASI02', name: 'Tool Misuse & Exploitation',     score: 87, status: 'enforced' },
-      { id: 'ASI03', name: 'Identity & Privilege Abuse',     score: 88, status: 'monitored' },
-      { id: 'ASI04', name: 'Supply Chain Vulnerabilities',   score: 79, status: 'partial' },
-      { id: 'ASI05', name: 'Unexpected Code Execution',      score: 82, status: 'monitored' },
-      { id: 'ASI06', name: 'Memory & Context Poisoning',     score: 85, status: 'partial' },
-      { id: 'ASI07', name: 'Insecure Inter-Agent Comms',     score: 86, status: 'monitored' },
-      { id: 'ASI08', name: 'Cascading Failures',             score: 83, status: 'partial' },
-      { id: 'ASI09', name: 'Human-Agent Trust Exploitation', score: 81, status: 'monitored' },
-      { id: 'ASI10', name: 'Rogue Agents',                   score: 78, status: 'enforced' },
-    ],
-  },
-  iso: {
-    overall: 85,
-    controls: [
-      { id: 'A.2',  name: 'AI Policies',          score: 90, status: 'compliant' },
-      { id: 'A.3',  name: 'Internal Organisation', score: 88, status: 'compliant' },
-      { id: 'A.5',  name: 'Impact Assessment',     score: 82, status: 'partial' },
-      { id: 'A.6',  name: 'AI Lifecycle',          score: 86, status: 'compliant' },
-      { id: 'A.8',  name: 'Transparency',          score: 91, status: 'compliant' },
-      { id: 'A.9',  name: 'Use of AI',             score: 79, status: 'partial' },
-      { id: 'A.10', name: 'Third-party AI',        score: 78, status: 'partial' },
-    ],
-  },
-};
+// --- Static mock data removed ---
 
 const STATUS_CFG = {
   compliant:  { color: '#10B981', label: 'Compliant',  bg: 'rgba(16,185,129,0.1)' },
@@ -204,12 +160,20 @@ export default function Compliance() {
   useEffect(() => {
     setLoading(true);
     api.qFetch(`/audit/compliance/summary?days=${days}`)
-      .then(d => { if (d?.overall != null) setData(d); else setData(MOCK_DATA); })
-      .catch(() => setData(MOCK_DATA))
+      .then(d => { if (d?.overall != null) setData(d); else setData(null); })
+      .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [days]);
 
-  const d = data || MOCK_DATA;
+  if (loading) {
+    return <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading real-time compliance data...</div>;
+  }
+
+  const d = data;
+  if (!d) {
+    return <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>No compliance data available. Connect an agent to begin auditing.</div>;
+  }
+
   const fw = FRAMEWORKS[activeTab];
   const fwData = d[activeTab];
   const controls = fwData?.controls || [];
