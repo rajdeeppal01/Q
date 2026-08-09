@@ -144,7 +144,18 @@ export default function Landing() {
 
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
               <strong style={{ color: '#d4d4d8' }}>4. Decorate & Govern:</strong><br/>
-              In your Python code, initialize Q by creating an agent instance (<span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>agent = QAgent(api_key="your-key")</span>) and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool (like refunding a user or dropping a database). Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
+              In your Python code, initialize Q with your API key and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool. Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
+            </div>
+            
+            <div style={{ background: 'var(--bg-deep)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '0.5rem 0 1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              <div><span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval</div>
+              <br />
+              <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(name=<span style={{ color: '#98c379' }}>"support-bot"</span>, api_key=<span style={{ color: '#98c379' }}>"q_sk_..."</span>)</div>
+              <br />
+              <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"critical"</span>)</div>
+              <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Refunding money"</span>)</div>
+              <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>refund_customer</span>(amount):</div>
+              <div>    <span style={{ color: '#c678dd' }}>return</span> stripe.refund(amount)</div>
             </div>
             
             <br />
