@@ -250,6 +250,9 @@ function RegisterModal({ onClose, onRegistered }) {
                 <option value="">Select framework...</option>
                 {FRAMEWORKS.map(f => <option key={f} value={f}>{f}</option>)}
               </select>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.5rem', display: 'flex', gap: '0.35rem', alignItems: 'flex-start' }}>
+                <span style={{ color: 'var(--accent)' }}>Tip:</span> This is just for your organization. If unsure, choose "Custom".
+              </p>
             </div>
           </div>
 
