@@ -144,7 +144,7 @@ export default function Landing() {
 
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
               <strong style={{ color: '#d4d4d8' }}>4. Decorate & Govern:</strong><br/>
-              In your Python code, initialize Q with your API key and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool (like refunding a user or dropping a database). Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
+              In your Python code, initialize Q by creating an agent instance (<span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>agent = QAgent(api_key="your-key")</span>) and add our <span style={{ color: 'var(--accent)' }}>@require_approval</span> decorator above any dangerous tool (like refunding a user or dropping a database). Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
             </div>
             
             <br />
