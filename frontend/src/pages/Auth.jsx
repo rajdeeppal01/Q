@@ -88,6 +88,7 @@ export const Auth = ({ onLogin }) => {
           cursor: pointer;
           padding: 0;
           text-decoration: underline;
+          white-space: nowrap;
         }
         .term-btn:hover {
           opacity: 0.8;
