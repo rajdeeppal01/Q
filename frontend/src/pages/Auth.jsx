@@ -116,6 +116,7 @@ export const Auth = ({ onLogin }) => {
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
               required
+              autoFocus={!isLogin}
             />
           </div>
         )}
@@ -128,6 +129,7 @@ export const Auth = ({ onLogin }) => {
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
             required
+            autoFocus={isLogin}
           />
         </div>
         <div style={{ display: 'flex' }}>
@@ -164,16 +166,7 @@ export const Auth = ({ onLogin }) => {
         </div>
       </form>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span>
-        <span style={{ 
-          display: 'inline-block', 
-          width: '12px', 
-          height: '22px', 
-          backgroundColor: 'var(--accent)',
-          animation: 'blink 1s step-end infinite'
-        }} />
-      </div>
+
     </div>
   );
 };
