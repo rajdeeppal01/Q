@@ -122,11 +122,25 @@ export default function Landing() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px', color: '#a1a1aa' }}>
             <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS:</div>
-            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>1. <span style={{ color: '#d4d4d8' }}>Install SDK:</span> Import the Q SDK into your agent's codebase.</div>
-            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>2. <span style={{ color: '#d4d4d8' }}>Initialize:</span> Authenticate with your Q API Key.</div>
-            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>3. <span style={{ color: '#d4d4d8' }}>Intercept:</span> Q evaluates all LLM tool calls against active policies.</div>
-            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>4. <span style={{ color: '#d4d4d8' }}>Govern:</span> If a policy is violated (e.g., executing a dangerous command), Q pauses the agent and sends a Human-in-the-Loop alert.</div>
-            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>5. <span style={{ color: '#d4d4d8' }}>Monitor:</span> All agent telemetry is streamed to the dashboard for real-time compliance auditing.</div>
+            <div style={{ marginBottom: '0.5rem', lineHeight: 1.5 }}>
+              Q acts as a middleware interceptor for your agents. You just install the SDK and decorate your dangerous tools.
+            </div>
+            
+            <div style={{ background: 'var(--bg-deep)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+              <div style={{ color: '#8b8b99', marginBottom: '0.5rem' }}>$ pip install q-agent-sdk</div>
+              <div><span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval</div>
+              <br />
+              <div><span style={{ color: '#56b6c2' }}>agent</span> = QAgent(name=<span style={{ color: '#98c379' }}>"support-bot"</span>, api_key=<span style={{ color: '#98c379' }}>"q_sk_..."</span>)</div>
+              <br />
+              <div><span style={{ color: '#e5c07b' }}>@agent.tool</span>(risk_level=<span style={{ color: '#98c379' }}>"critical"</span>)</div>
+              <div><span style={{ color: '#e5c07b' }}>@require_approval</span>(reason=<span style={{ color: '#98c379' }}>"Refunding money"</span>)</div>
+              <div><span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#61afef' }}>refund_customer</span>(amount):</div>
+              <div>    <span style={{ color: '#c678dd' }}>return</span> stripe.refund(amount)</div>
+            </div>
+
+            <div style={{ marginBottom: '0.25rem', lineHeight: 1.5 }}>
+              When the agent tries to call <span style={{ color: 'var(--accent)' }}>refund_customer</span>, Q intercepts the execution, pauses the python script locally, and sends a real-time <span style={{ color: '#EF4444', fontWeight: 'bold' }}>Human-in-the-Loop</span> alert to your Q Dashboard. The agent is frozen until you click Approve.
+            </div>
             <br />
             <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
           </div>
