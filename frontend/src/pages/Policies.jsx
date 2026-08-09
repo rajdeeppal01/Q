@@ -121,7 +121,7 @@ function CreatePolicyModal({ onClose, onCreated }) {
               onChange={e => setForm({ ...form, tool_name: e.target.value })}
             />
             <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.5rem', display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
-              <span style={{ color: 'var(--accent)' }}>💡 Tip:</span> Check the Live Monitor feed to discover the exact names of tools your agents are executing.
+              <span style={{ color: 'var(--accent)' }}>Tip:</span> Check the Live Monitor feed to discover the exact names of tools your agents are executing.
             </p>
           </div>
 
