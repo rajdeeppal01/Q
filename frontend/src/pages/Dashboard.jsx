@@ -32,7 +32,6 @@ function KpiCard({ label, value, sub, color, icon, trend }) {
         <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>
           {label}
         </span>
-        <span style={{ fontSize: '1.1rem' }}>{icon}</span>
       </div>
       <div style={{ fontSize: '2.25rem', fontWeight: 800, fontFamily: 'var(--font-mono)', color, lineHeight: 1 }}>
         {value}
