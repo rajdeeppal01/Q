@@ -48,13 +48,17 @@ export default function SetupGuide() {
             
             <div style={{ background: '#09090b', padding: '1rem', borderRadius: 8, border: '1px solid #27272a', overflowX: 'auto', fontSize: '0.8125rem', fontFamily: 'var(--font-mono)' }}>
               <pre style={{ margin: 0, color: '#a1a1aa' }}>
+<span style={{ color: '#8b8b99', fontStyle: 'italic' }}># 1. Install the SDK in your terminal: pip install q_sdk</span><br/>
+<span style={{ color: '#8b8b99', fontStyle: 'italic' }}># 2. Save this code as test_agent.py and run it: python test_agent.py</span><br/><br/>
 <span style={{ color: '#c678dd' }}>from</span> q_sdk <span style={{ color: '#c678dd' }}>import</span> QAgent, require_approval<br/><br/>
-<span style={{ color: '#5c6370', fontStyle: 'italic' }}># 1. Initialize with your API key</span><br/>
+<span style={{ color: '#5c6370', fontStyle: 'italic' }}># Initialize with your API key from Step 1</span><br/>
 agent = QAgent(api_key=<span style={{ color: '#98c379' }}>"q-sk-..."</span>)<br/><br/>
-<span style={{ color: '#5c6370', fontStyle: 'italic' }}># 2. Add the decorator to govern the tool</span><br/>
+<span style={{ color: '#5c6370', fontStyle: 'italic' }}># Add the decorator to govern any tool/function</span><br/>
 <span style={{ color: '#61afef' }}>@require_approval</span>(agent)<br/>
 <span style={{ color: '#c678dd' }}>def</span> <span style={{ color: '#e5c07b' }}>refund_user</span>(user_id, amount):<br/>
-    <span style={{ color: '#c678dd' }}>return</span> stripe.Refund.create(amount=amount)
+    <span style={{ color: '#c678dd' }}>return</span> <span style={{ color: '#98c379' }}>f"Refunded ${amount}"</span><br/><br/>
+<span style={{ color: '#5c6370', fontStyle: 'italic' }}># Call the function (Q will intercept it and send it to your Live Monitor!)</span><br/>
+refund_user(<span style={{ color: '#98c379' }}>"usr_123"</span>, <span style={{ color: '#d19a66' }}>50.00</span>)
               </pre>
             </div>
           </div>
