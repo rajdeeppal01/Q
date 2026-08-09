@@ -323,7 +323,7 @@ export default function Compliance() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
           {/* Radar chart */}
           <div className="glass-card" style={{ flex: '0 0 auto' }}>
-            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 'var(--space-md)' }}>📡 Radar Overview</h3>
+            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 'var(--space-md)' }}> Radar Overview</h3>
             <ResponsiveContainer width="100%" height={220}>
               <RadarChart data={radarData}>
                 <PolarGrid stroke="rgba(255,255,255,0.06)" />
@@ -343,7 +343,7 @@ export default function Compliance() {
 
           {/* Agent compliance chips */}
           <div className="glass-card">
-            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 'var(--space-md)' }}>🤖 Agent Health</h3>
+            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 'var(--space-md)' }}> Agent Health</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem' }}>
               <StatChip label="Total Agents"    value={d.summary.total_agents}      color="var(--accent)" />
               <StatChip label="Active"          value={d.summary.active_agents}      color="#10B981" />
@@ -354,7 +354,7 @@ export default function Compliance() {
 
           {/* Status legend */}
           <div className="glass-card">
-            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 'var(--space-md)' }}>🏷️ Status Legend</h3>
+            <h3 style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 'var(--space-md)' }}> Status Legend</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {Object.entries(STATUS_CFG).map(([key, cfg]) => (
                 <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>

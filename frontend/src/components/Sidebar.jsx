@@ -156,18 +156,15 @@ export default function Sidebar({ onLogout }) {
         <div style={{ padding: 'var(--space-lg)', borderBottom: '1px solid var(--border-subtle)', cursor: 'pointer' }}>
           <div className="flex items-center gap-sm">
             <div style={{
-              width: 36, height: 36, borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, var(--accent), #A855F7)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '1.1rem',
-              color: 'var(--bg-void)', boxShadow: 'var(--shadow-glow)',
+              fontFamily: 'var(--font-mono)', fontWeight: 800, fontSize: '1.5rem',
+              color: 'var(--accent)',
             }}>
-              Q
+              [Q]
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>Q</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                Agent Governance
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                /agents/
               </div>
             </div>
           </div>

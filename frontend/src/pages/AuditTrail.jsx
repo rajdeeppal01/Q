@@ -16,8 +16,8 @@ const RISK_CFG = {
 
 const TYPE_ICONS = {
   tool_call:   '🔧',
-  llm_invoke:  '🤖',
-  data_access: '🗄️',
+  llm_invoke:  '',
+  data_access: '',
   error:       '❌',
   heartbeat:   '💓',
   decision:    '🧠',
@@ -82,7 +82,7 @@ function EventDrawer({ event, onClose }) {
       }}>
         <div>
           <div style={{ fontSize: '1rem', fontWeight: 700, color: risk.color }}>
-            {TYPE_ICONS[event.event_type] || '📡'} {event.tool_name || event.event_type}
+            {TYPE_ICONS[event.event_type] || ''} {event.tool_name || event.event_type}
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4, wordBreak: 'break-all' }}>
             {event.id}
@@ -220,7 +220,7 @@ function EventRow({ event, selected, onSelect, indented }) {
     >
       <div>
         <span style={{ color: risk.color, fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-          {TYPE_ICONS[event.event_type] || '📡'} {event.tool_name || event.event_type}
+          {TYPE_ICONS[event.event_type] || ''} {event.tool_name || event.event_type}
         </span>
         <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginLeft: 8 }}>{event.agent_name}</span>
       </div>

@@ -164,10 +164,10 @@ export default function Dashboard() {
   ];
 
   const kpiCards = [
-    { label: 'Events Tracked', value: kpis.totalEvents, icon: '📡', color: 'var(--accent)', sub: 'Last 50 events' },
-    { label: 'Actions Blocked', value: kpis.blockedActions, icon: '🛡️', color: 'var(--status-revoked)', sub: 'Policy violations' },
-    { label: 'High Risk Events', value: kpis.highRiskEvents, icon: '⚠️', color: 'var(--risk-high)', sub: 'High + Critical' },
-    { label: 'Avg Latency', value: `${kpis.avgLatency}ms`, icon: '⚡', color: 'var(--status-active)', sub: 'Tool call latency' },
+    { label: 'Events Tracked', value: kpis.totalEvents, icon: '', color: 'var(--accent)', sub: 'Last 50 events' },
+    { label: 'Actions Blocked', value: kpis.blockedActions, icon: '', color: 'var(--status-revoked)', sub: 'Policy violations' },
+    { label: 'High Risk Events', value: kpis.highRiskEvents, icon: '', color: 'var(--risk-high)', sub: 'High + Critical' },
+    { label: 'Avg Latency', value: `${kpis.avgLatency}ms`, icon: '', color: 'var(--status-active)', sub: 'Tool call latency' },
   ];
 
   return (
@@ -184,11 +184,11 @@ export default function Dashboard() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem' }}>
           <div style={{
-            width: 8, height: 8, borderRadius: '50%',
+            width: 8, height: 8, borderRadius: '0%',
             background: wsConnected ? 'var(--status-active)' : 'var(--risk-medium)',
             boxShadow: wsConnected ? '0 0 8px var(--status-active)' : 'none',
           }} />
-          <span style={{ color: 'var(--text-muted)' }}>
+          <span style={{ color: 'var(--accent)' }}>
             {wsConnected ? 'Live WebSocket' : 'Simulated Feed'}
           </span>
         </div>
@@ -210,7 +210,7 @@ export default function Dashboard() {
         {/* Activity Chart */}
         <motion.div variants={item} className="glass-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>📊 Event Activity</h3>
+            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>Event Activity</h3>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
               events / sec
             </span>
@@ -230,7 +230,7 @@ export default function Dashboard() {
         {/* Risk Donut */}
         <motion.div variants={item} className="glass-card">
           <div style={{ marginBottom: 'var(--space-md)' }}>
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>🎯 Risk Distribution</h3>
+            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>Risk Distribution</h3>
           </div>
           <RiskDonut riskCounts={riskCounts} />
         </motion.div>
@@ -244,7 +244,7 @@ export default function Dashboard() {
         {/* Live Event Feed */}
         <motion.div variants={item} className="glass-card" style={{ minHeight: 320 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>📡 Live Event Feed</h3>
+            <h3 style={{ fontSize: '0.9375rem', fontWeight: 700 }}>Live Event Feed</h3>
             <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
               {events.length} events
             </span>
@@ -260,7 +260,7 @@ export default function Dashboard() {
 
         {/* Compliance Scorecard */}
         <motion.div variants={item} className="glass-card">
-          <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>🛡️ Compliance</h3>
+          <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>Compliance</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
             {complianceConfig.map((c) => (
               <ComplianceBar key={c.label} {...c} />
@@ -276,7 +276,7 @@ export default function Dashboard() {
 
         {/* Top Agents by Risk */}
         <motion.div variants={item} className="glass-card">
-          <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>🤖 Risk by Agent</h3>
+          <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>Risk by Agent</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
             {topAgentsByRisk.map((agent) => (
               <AgentRiskBar key={agent.id} agent={agent} maxScore={maxScore} />

@@ -6,10 +6,10 @@ import { api } from '../api/client';
 
 const RISK_ICONS = {
   tool_call:   '🔧',
-  data_access: '🗄️',
+  data_access: '',
   api_call:    '🌐',
-  file_write:  '✍️',
-  execute:     '⚡',
+  file_write:  '',
+  execute:     '',
   transfer:    '💸',
 };
 
@@ -46,7 +46,7 @@ function ApprovalCard({ approval, onReview }) {
     } catch { setActing(null); }
   };
 
-  const icon = RISK_ICONS[approval.context?.tool_name?.split('_')[0]] || '⚠️';
+  const icon = RISK_ICONS[approval.context?.tool_name?.split('_')[0]] || '';
 
   return (
     <motion.div
@@ -84,7 +84,7 @@ function ApprovalCard({ approval, onReview }) {
               </span>
               {remaining && (
                 <span style={{ fontSize: '0.7rem', color: isExpiring ? '#EF4444' : 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
-                  ⏱ {remaining}
+                   {remaining}
                 </span>
               )}
             </div>
@@ -186,7 +186,7 @@ function EmptyState() {
         display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem',
         boxShadow: '0 0 30px rgba(16,185,129,0.15)',
       }}>
-        🛡️
+        
       </div>
       <div>
         <h3 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: 6, color: '#10B981' }}>Inbox Zero</h3>
@@ -258,7 +258,7 @@ export function Approvals() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)', flexShrink: 0 }}>
         {[
           { label: 'Pending', value: approvals.length, color: '#F59E0B', emoji: '⏸' },
-          { label: 'Avg Wait',  value: slaAvg ? (slaAvg < 60 ? `${slaAvg}s` : `${Math.floor(slaAvg/60)}m`) : '—', color: 'var(--accent)', emoji: '⏱' },
+          { label: 'Avg Wait',  value: slaAvg ? (slaAvg < 60 ? `${slaAvg}s` : `${Math.floor(slaAvg/60)}m`) : '—', color: 'var(--accent)', emoji: '' },
           { label: 'Actioned Today', value: history.length, color: '#10B981', emoji: '✓' },
         ].map(s => (
           <div key={s.label} className="glass-card" style={{ padding: '0.875rem 1.125rem', display: 'flex', alignItems: 'center', gap: '0.875rem' }}>

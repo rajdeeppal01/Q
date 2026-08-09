@@ -13,12 +13,12 @@ const RISK_COLORS = {
 
 const EVENT_TYPE_ICONS = {
   tool_call:   '🔧',
-  llm_invoke:  '🤖',
-  data_access: '🗄️',
+  llm_invoke:  '',
+  data_access: '',
   error:       '❌',
   heartbeat:   '💓',
   decision:    '🧠',
-  default:     '📡',
+  default:     '',
 };
 
 const MOCK_AGENTS = [
@@ -480,7 +480,7 @@ export default function LiveMonitor() {
           <div ref={feedRef} style={{ flex: 1, overflowY: 'auto' }}>
             {filtered.length === 0 ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--text-muted)', fontSize: '0.875rem', gap: '0.5rem' }}>
-                📡 Waiting for events...
+                 Waiting for events...
               </div>
             ) : (
               <AnimatePresence initial={false}>

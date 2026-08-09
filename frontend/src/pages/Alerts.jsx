@@ -14,9 +14,9 @@ const SEV = {
 const TYPE_ICONS = {
   anomaly_detected:    { icon: '🔬', label: 'Anomaly' },
   policy_violation:    { icon: '🚫', label: 'Policy Violation' },
-  rogue_behavior:      { icon: '⚠️', label: 'Rogue Behavior' },
+  rogue_behavior:      { icon: '', label: 'Rogue Behavior' },
   credential_expiry:   { icon: '🔑', label: 'Credential Expiry' },
-  rate_limit_exceeded: { icon: '⏱️', label: 'Rate Limit' },
+  rate_limit_exceeded: { icon: '', label: 'Rate Limit' },
   exfiltration:        { icon: '📤', label: 'Data Exfiltration' },
 };
 
@@ -308,7 +308,7 @@ export default function Alerts() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 250, gap: 12 }}>
-            <span style={{ fontSize: '3rem' }}>🛡️</span>
+            <span style={{ fontSize: '3rem' }}></span>
             <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>No alerts found</span>
             <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
               {filterStatus === 'open' ? 'All clear — no open alerts right now.' : 'Try adjusting your filters.'}

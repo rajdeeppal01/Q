@@ -21,8 +21,8 @@ const RISK_CFG = {
 
 const TYPE_ICONS = {
   tool_call:   { icon: '🔧', color: '#00F0FF' },
-  llm_invoke:  { icon: '🤖', color: '#A855F7' },
-  data_access: { icon: '🗄️', color: '#F59E0B' },
+  llm_invoke:  { icon: '', color: '#A855F7' },
+  data_access: { icon: '', color: '#F59E0B' },
   error:       { icon: '❌', color: '#EF4444' },
   heartbeat:   { icon: '💓', color: '#10B981' },
   decision:    { icon: '🧠', color: '#6366F1' },
@@ -54,7 +54,7 @@ function StatCard({ value, label, color, sublabel }) {
 // ─── Activity Timeline ────────────────────────────────────────────────────────
 
 function TimelineEvent({ event }) {
-  const type = TYPE_ICONS[event.event_type] || { icon: '📡', color: 'var(--accent)' };
+  const type = TYPE_ICONS[event.event_type] || { icon: '', color: 'var(--accent)' };
   const risk = RISK_CFG[event.risk_level] || RISK_CFG.low;
   const time = event.created_at ? new Date(event.created_at).toLocaleTimeString('en-US', { hour12: false }) : '—';
   return (
@@ -238,7 +238,7 @@ export default function AgentDetail() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.75rem',
               boxShadow: `0 0 20px ${sc.color}30`,
             }}>
-              🤖
+              
             </div>
             <div>
               <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>{agent.name}</h1>
@@ -268,7 +268,7 @@ export default function AgentDetail() {
                 onClick={() => handleStatus('paused')}
                 style={{ padding: '0.4rem 0.875rem', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', border: '1px solid rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.08)', color: '#F59E0B', transition: 'all 0.15s' }}
               >
-                {confirmAction === 'paused' ? '⚠ Confirm Pause?' : '⏸ Pause'}
+                {confirmAction === 'paused' ? ' Confirm Pause?' : '⏸ Pause'}
               </button>
             )}
             {agent.status === 'paused' && (
@@ -286,7 +286,7 @@ export default function AgentDetail() {
                 onClick={() => handleStatus('quarantined')}
                 style={{ padding: '0.4rem 0.875rem', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', border: '1px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', color: '#EF4444', transition: 'all 0.15s' }}
               >
-                {confirmAction === 'quarantined' ? '⚠ Confirm Quarantine?' : '🔒 Quarantine'}
+                {confirmAction === 'quarantined' ? ' Confirm Quarantine?' : ' Quarantine'}
               </button>
             )}
             <button
@@ -311,7 +311,7 @@ export default function AgentDetail() {
             <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               style={{ marginTop: 12, background: 'rgba(0,240,255,0.06)', border: '1px solid rgba(0,240,255,0.3)', borderRadius: 8, padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
               <div>
-                <div style={{ fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 700, marginBottom: 4 }}>⚠ NEW API KEY — Copy now, it won't be shown again:</div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 700, marginBottom: 4 }}> NEW API KEY — Copy now, it won't be shown again:</div>
                 <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-primary)', wordBreak: 'break-all' }}>{keyResult}</code>
               </div>
               <button onClick={() => { navigator.clipboard.writeText(keyResult); setKeyResult(null); }}
@@ -339,7 +339,7 @@ export default function AgentDetail() {
         {/* Activity Timeline */}
         <div className="glass-card" style={{ padding: '1.25rem' }}>
           <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span>⏱ Activity Timeline</span>
+            <span> Activity Timeline</span>
             <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 400 }}>{events.length} events shown</span>
           </div>
           <div style={{ maxHeight: 520, overflowY: 'auto' }}>
@@ -354,7 +354,7 @@ export default function AgentDetail() {
           {/* Risk Breakdown */}
           {stats && (
             <div className="glass-card" style={{ padding: '1.25rem' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}>📊 Risk Breakdown</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}> Risk Breakdown</div>
               <RiskDonut breakdown={stats.risk_breakdown || {}} />
             </div>
           )}
@@ -382,7 +382,7 @@ export default function AgentDetail() {
           {/* Metadata */}
           {agent.metadata_ && Object.keys(agent.metadata_).length > 0 && (
             <div className="glass-card" style={{ padding: '1.25rem' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}>🏷 Metadata</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}> Metadata</div>
               {Object.entries(agent.metadata_).map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.3rem 0', borderBottom: '1px solid var(--border-subtle)', fontSize: '0.78rem' }}>
                   <span style={{ color: 'var(--text-muted)' }}>{k}</span>
