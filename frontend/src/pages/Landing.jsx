@@ -128,18 +128,18 @@ export default function Landing() {
             <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>HOW Q WORKS (3-STEP SETUP):</div>
             
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>Step 1: Define your Policies</strong><br/>
-              Sign up and go to your <strong>Policy Engine</strong>. Tell Q what you want to regulate—for example, require human approval for "refund_customer" or outright block "drop_database".
+              <strong style={{ color: '#d4d4d8' }}>Step 1: Install & Initialize</strong><br/>
+              Run <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span> and initialize Q in your codebase with your API key.
             </div>
             
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>Step 2: Install & Initialize</strong><br/>
-              Run <span style={{ color: '#8b8b99', fontFamily: 'var(--font-mono)' }}>pip install q-agent-sdk</span> and initialize Q in your codebase with your API key.
+              <strong style={{ color: '#d4d4d8' }}>Step 2: Start Regulating (Live Monitor)</strong><br/>
+              Run your agents as normal! Let them execute tools in a sandbox environment and watch the events stream into your Live Monitor in real-time.
             </div>
 
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-              <strong style={{ color: '#d4d4d8' }}>Step 3: Start Regulating</strong><br/>
-              Run your agents as normal! Q will instantly enforce your policies, pause dangerous actions locally, and stream real-time alerts to your dashboard.
+              <strong style={{ color: '#d4d4d8' }}>Step 3: Define your Policies</strong><br/>
+              Now that you see exactly what tools your agents use, go to your <strong>Policy Engine</strong> to lock them down. For example, block "drop_database" or require human approval for "refund_customer".
             </div>
             
             <div style={{ background: 'var(--bg-deep)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#a1a1aa', margin: '0.5rem 0 1rem 0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>

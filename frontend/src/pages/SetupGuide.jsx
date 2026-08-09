@@ -21,27 +21,11 @@ export default function SetupGuide() {
         
         {/* Step 1 */}
         <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid rgba(16,185,129,0.3)' }}>
-            <Shield size={24} color="#10B981" />
-          </div>
-          <div>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#10B981', marginBottom: '0.5rem' }}>1. Define your Policies</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
-              Tell Q what you want to regulate. For example, block any agent from dropping a database, or require human approval before issuing refunds.
-            </p>
-            <Link to="/policies" className="btn btn-ghost btn-sm" style={{ display: 'inline-flex', padding: '0.5rem 1rem', background: 'var(--bg-deep)', border: '1px solid var(--border-subtle)' }}>
-              Go to Policies →
-            </Link>
-          </div>
-        </motion.div>
-
-        {/* Step 2 */}
-        <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
           <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid rgba(245,158,11,0.3)' }}>
             <Bot size={24} color="#F59E0B" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#F59E0B', marginBottom: '0.5rem' }}>2. Register Agent & Get API Key</h3>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#F59E0B', marginBottom: '0.5rem' }}>1. Register Agent & Get API Key</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
               Create an identity for your agent so Q can track its activity. Once registered, you will receive a secure API Key.
             </p>
@@ -51,15 +35,15 @@ export default function SetupGuide() {
           </div>
         </motion.div>
 
-        {/* Step 3 */}
+        {/* Step 2 */}
         <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
           <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(0,229,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid var(--border-accent)' }}>
             <Code size={24} color="var(--accent)" />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.5rem' }}>3. Decorate & Govern</h3>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.5rem' }}>2. Decorate & Govern</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
-              In your Python code, initialize Q by creating an agent instance and add our <code style={{color:'var(--accent)',fontFamily:'var(--font-mono)'}}>@require_approval</code> decorator above any dangerous tool. Q will instantly intercept that tool remotely and beam a Human-in-the-Loop alert to your dashboard before it executes.
+              In your Python code, initialize Q by creating an agent instance and add our <code style={{color:'var(--accent)',fontFamily:'var(--font-mono)'}}>@require_approval</code> decorator above any dangerous tool. When you run your agent, it will send telemetry to your Live Monitor.
             </p>
             
             <div style={{ background: '#09090b', padding: '1rem', borderRadius: 8, border: '1px solid #27272a', overflowX: 'auto', fontSize: '0.8125rem', fontFamily: 'var(--font-mono)' }}>
@@ -73,6 +57,22 @@ agent = QAgent(api_key=<span style={{ color: '#98c379' }}>"q-sk-..."</span>)<br/
     <span style={{ color: '#c678dd' }}>return</span> stripe.Refund.create(amount=amount)
               </pre>
             </div>
+          </div>
+        </motion.div>
+
+        {/* Step 3 */}
+        <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid rgba(16,185,129,0.3)' }}>
+            <Shield size={24} color="#10B981" />
+          </div>
+          <div>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#10B981', marginBottom: '0.5rem' }}>3. Define your Policies</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+              Now that your agent is connected and you can see its exact tools in the Live Monitor, tell Q what you want to regulate. For example, block any agent from dropping a database.
+            </p>
+            <Link to="/policies" className="btn btn-ghost btn-sm" style={{ display: 'inline-flex', padding: '0.5rem 1rem', background: 'var(--bg-deep)', border: '1px solid var(--border-subtle)' }}>
+              Go to Policies →
+            </Link>
           </div>
         </motion.div>
 
