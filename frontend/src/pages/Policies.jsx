@@ -1,20 +1,186 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Plus, Trash2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, Plus, Trash2, AlertTriangle, ShieldCheck, X, RefreshCw } from 'lucide-react';
 import { api } from '../api/client';
+
+function EmptyState({ onCreate }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        minHeight: 360, textAlign: 'center', gap: '1.5rem',
+      }}
+    >
+      <div style={{
+        width: 80, height: 80, borderRadius: 20,
+        background: 'linear-gradient(135deg, rgba(0,229,255,0.15), rgba(168,85,247,0.15))',
+        border: '1px solid var(--border-accent)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 0 40px rgba(0,229,255,0.1)',
+      }}>
+        <Shield size={36} color="var(--accent)" />
+      </div>
+      <div>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Welcome to Q! Let's get started.</h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: 400 }}>
+          Before your agents run wild, let's establish some ground rules. What tool or action do you want to regulate first?
+        </p>
+      </div>
+      <button className="btn btn-primary" onClick={onCreate} style={{ gap: '0.5rem' }}>
+        <Plus size={16} /> Create Your First Policy
+      </button>
+    </motion.div>
+  );
+}
+
+function CreatePolicyModal({ onClose, onCreated }) {
+  const [form, setForm] = useState({ name: '', tool_name: '', action: 'block' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.tool_name) return;
+    
+    setLoading(true);
+    setError(null);
+    try {
+      const policyData = {
+        name: form.name,
+        description: `Block or require approval for tool: ${form.tool_name}`,
+        policy_type: "tool_restriction",
+        conditions: { tool_name: form.tool_name },
+        actions: { type: form.action },
+        severity: form.action === 'block' ? 'critical' : 'warning'
+      };
+
+      await api.createPolicy(policyData);
+      onCreated();
+    } catch (err) {
+      setError(err.message || 'Failed to create policy');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(5,5,8,0.85)', backdropFilter: 'blur(12px)',
+        zIndex: 200,
+      }}
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'var(--bg-card)', border: '1px solid var(--border-default)',
+          borderRadius: 'var(--radius-xl)', padding: '2rem', maxWidth: 500, width: '90%',
+          boxShadow: 'var(--shadow-lg)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--accent-glow)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-accent)' }}>
+              <Shield size={20} color="var(--accent)" />
+            </div>
+            <div>
+              <h3 style={{ fontWeight: 700 }}>Create Security Policy</h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Define a new governance rule</p>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+              Rule Name *
+            </label>
+            <input
+              required
+              className="input"
+              placeholder="e.g. Prevent Database Drops"
+              value={form.name}
+              onChange={e => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+              Target Tool Name *
+            </label>
+            <input
+              required
+              className="input"
+              style={{ fontFamily: 'var(--font-mono)' }}
+              placeholder="e.g. drop_database"
+              value={form.tool_name}
+              onChange={e => setForm({ ...form, tool_name: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+              Action Taken *
+            </label>
+            <select
+              className="input"
+              value={form.action}
+              onChange={e => setForm({ ...form, action: e.target.value })}
+              style={{ cursor: 'pointer' }}
+            >
+              <option value="block">Block Execution</option>
+              <option value="require_approval">Require Human Approval (HITL)</option>
+            </select>
+          </div>
+
+          {error && (
+            <div style={{ padding: '0.75rem', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 8, color: '#F87171', fontSize: '0.8rem', display: 'flex', gap: '0.5rem' }}>
+              <AlertTriangle size={14} style={{ flexShrink: 0, marginTop: 2 }} /> {error}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+            <button type="button" onClick={onClose} className="btn btn-ghost" style={{ flex: 1 }}>
+              Cancel
+            </button>
+            <button type="submit" disabled={loading} className="btn btn-primary" style={{ flex: 2 }}>
+              {loading ? (
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                  Deploying...
+                </span>
+              ) : (
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Plus size={14} /> Deploy Rule
+                </span>
+              )}
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export const Policies = () => {
   const [policies, setPolicies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [newPolicy, setNewPolicy] = useState({
-    name: '',
-    tool_name: '',
-    action: 'block'
-  });
-
-  useEffect(() => {
-    fetchPolicies();
-  }, []);
 
   const fetchPolicies = async () => {
     try {
@@ -27,118 +193,84 @@ export const Policies = () => {
     }
   };
 
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    if (!newPolicy.name || !newPolicy.tool_name) return;
+  useEffect(() => {
+    fetchPolicies();
+  }, []);
 
-    try {
-      const policyData = {
-        name: newPolicy.name,
-        description: `Block or require approval for tool: ${newPolicy.tool_name}`,
-        policy_type: "tool_restriction",
-        conditions: { tool_name: newPolicy.tool_name },
-        actions: { type: newPolicy.action },
-        severity: newPolicy.action === 'block' ? 'critical' : 'warning'
-      };
-
-      await api.createPolicy(policyData);
-      setShowModal(false);
-      setNewPolicy({ name: '', tool_name: '', action: 'block' });
-      fetchPolicies();
-    } catch (err) {
-      console.error("Failed to create policy", err);
-    }
+  const handleCreated = () => {
+    setShowModal(false);
+    fetchPolicies();
   };
 
   const handleDelete = async (id) => {
-    // In our backend, deactivate_policy could just be a delete or update
-    // Let's assume the router actually handles it if we added it, but right now we might just have POST and GET. 
-    // If delete isn't strictly defined, we can at least show it. The backend actually has DELETE? 
-    // Wait, the existing policies.py didn't have DELETE. But we can add it later.
-    // For MVP, just remove it from state or rely on backend.
     console.warn("Delete policy not fully implemented in backend yet.");
+    // For now we will just assume deletion works or isn't supported yet in demo
   };
 
   if (isLoading) {
-    return <div className="p-8 text-q-muted animate-pulse">Loading policies...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200, color: 'var(--text-muted)' }}>
+        <RefreshCw size={20} style={{ animation: 'spin 1s linear infinite', marginRight: 8 }} /> Loading policies...
+      </div>
+    );
   }
 
   return (
-    <div className="p-8 space-y-6 animate-fade-in max-w-6xl">
-      <div className="flex items-center justify-between">
+    <div>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 'var(--space-xl)' }}>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-q-glow">Policy Engine</h1>
-          <p className="text-q-muted mt-1">Govern agent behavior with strict security boundaries.</p>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>
+            Policy <span className="text-gradient">Engine</span>
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: 'var(--space-xs)' }}>
+            Govern agent behavior with strict security boundaries.
+          </p>
         </div>
-        <button 
-          onClick={() => setShowModal(true)}
-          className="bg-q-glow/10 hover:bg-q-glow/20 text-q-glow px-4 py-2 rounded-lg border border-q-glow/30 flex items-center gap-2 transition-colors"
-        >
-          <Plus size={18} />
-          Create Rule
+        <button className="btn btn-primary" onClick={() => setShowModal(true)} style={{ gap: '0.5rem' }}>
+          <Plus size={16} /> Create Rule
         </button>
       </div>
 
-      <div className="bg-q-panel border border-q-border rounded-xl overflow-hidden">
-        {policies.length === 0 ? (
-          <div className="p-12 flex flex-col items-center justify-center min-h-[300px] text-center">
-            <div className="w-16 h-16 rounded-full bg-q-glow/10 flex items-center justify-center mb-6 border border-q-glow/20">
-              <Shield className="h-8 w-8 text-q-glow" />
-            </div>
-            <h2 className="text-2xl font-bold text-white mb-3">Welcome to Q! Let's get started.</h2>
-            <p className="text-q-muted max-w-md mb-8 text-lg">
-              Before your agents run wild, let's establish some ground rules. What tool or action do you want to regulate first?
-            </p>
-            <button 
-              onClick={() => setShowModal(true)}
-              className="bg-q-glow text-black hover:bg-q-glow/90 px-6 py-3 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(0,255,157,0.3)] flex items-center gap-2"
-            >
-              <Plus size={20} />
-              Create Your First Policy
-            </button>
-          </div>
-        ) : (
-          <table className="w-full text-left border-collapse">
+      {policies.length === 0 ? (
+        <EmptyState onCreate={() => setShowModal(true)} />
+      ) : (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr className="border-b border-q-border/50 bg-q-base/50">
-                <th className="p-4 text-xs font-semibold text-q-muted uppercase tracking-wider">Rule Name</th>
-                <th className="p-4 text-xs font-semibold text-q-muted uppercase tracking-wider">Condition</th>
-                <th className="p-4 text-xs font-semibold text-q-muted uppercase tracking-wider">Action</th>
-                <th className="p-4 text-xs font-semibold text-q-muted uppercase tracking-wider">Status</th>
-                <th className="p-4 text-xs font-semibold text-q-muted uppercase tracking-wider text-right">Manage</th>
+              <tr style={{ borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)', fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Rule Name</th>
+                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Condition</th>
+                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Action</th>
+                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Status</th>
+                <th style={{ padding: '0.75rem 1rem', fontWeight: 600, textAlign: 'right' }}>Manage</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-q-border/30">
+            <tbody>
               {policies.map(policy => (
-                <tr key={policy.id} className="hover:bg-q-base/30 transition-colors">
-                  <td className="p-4 font-medium">{policy.name}</td>
-                  <td className="p-4 font-mono text-sm text-q-muted">
+                <tr key={policy.id} style={{ borderBottom: '1px solid var(--border-subtle)', fontSize: '0.8125rem', transition: 'background 0.15s' }}>
+                  <td style={{ padding: '0.75rem 1rem', fontWeight: 500, color: 'var(--text-primary)' }}>{policy.name}</td>
+                  <td style={{ padding: '0.75rem 1rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
                     tool == "{policy.conditions.tool_name}"
                   </td>
-                  <td className="p-4">
+                  <td style={{ padding: '0.75rem 1rem' }}>
                     {policy.actions.type === 'block' ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20">
-                        <AlertTriangle size={12} />
-                        Block
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'rgba(239,68,68,0.1)', color: '#EF4444', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(239,68,68,0.2)' }}>
+                        <AlertTriangle size={12} /> Block
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                        <ShieldCheck size={12} />
-                        Require Approval
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'rgba(245,158,11,0.1)', color: '#F59E0B', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(245,158,11,0.2)' }}>
+                        <ShieldCheck size={12} /> Require Approval
                       </span>
                     )}
                   </td>
-                  <td className="p-4">
-                    <span className="text-emerald-400 text-sm flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse-slow"></span>
-                      Active
+                  <td style={{ padding: '0.75rem 1rem' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#10B981', fontSize: '0.75rem', fontWeight: 600 }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B981' }} /> Active
                     </span>
                   </td>
-                  <td className="p-4 text-right">
-                    <button 
-                      onClick={() => handleDelete(policy.id)}
-                      className="text-q-muted hover:text-red-400 transition-colors"
-                    >
+                  <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
+                    <button onClick={() => handleDelete(policy.id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'inline-flex', padding: 4 }}>
                       <Trash2 size={16} />
                     </button>
                   </td>
@@ -146,76 +278,14 @@ export const Policies = () => {
               ))}
             </tbody>
           </table>
-        )}
-      </div>
-
-      {/* Create Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in">
-          <div className="bg-q-panel border border-q-border rounded-xl w-full max-w-md shadow-2xl overflow-hidden">
-            <div className="p-5 border-b border-q-border flex items-center gap-3">
-              <div className="p-2 bg-q-glow/10 rounded-lg text-q-glow">
-                <Shield size={20} />
-              </div>
-              <h2 className="text-lg font-semibold text-white">Create Security Policy</h2>
-            </div>
-            
-            <form onSubmit={handleCreate} className="p-5 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-q-muted mb-1.5">Rule Name</label>
-                <input 
-                  required
-                  type="text" 
-                  placeholder="e.g. Prevent Database Drops"
-                  className="w-full bg-q-base border border-q-border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-q-glow transition-colors"
-                  value={newPolicy.name}
-                  onChange={e => setNewPolicy({...newPolicy, name: e.target.value})}
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-q-muted mb-1.5">Target Tool Name</label>
-                <input 
-                  required
-                  type="text" 
-                  placeholder="e.g. drop_database"
-                  className="w-full bg-q-base border border-q-border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-q-glow transition-colors font-mono"
-                  value={newPolicy.tool_name}
-                  onChange={e => setNewPolicy({...newPolicy, tool_name: e.target.value})}
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-q-muted mb-1.5">Action Taken</label>
-                <select 
-                  className="w-full bg-q-base border border-q-border rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-q-glow transition-colors"
-                  value={newPolicy.action}
-                  onChange={e => setNewPolicy({...newPolicy, action: e.target.value})}
-                >
-                  <option value="block">Block Execution</option>
-                  <option value="require_approval">Require Human Approval (HITL)</option>
-                </select>
-              </div>
-
-              <div className="pt-4 flex gap-3">
-                <button 
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 bg-q-base hover:bg-q-border rounded-lg text-sm font-medium transition-colors border border-q-border/50"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-q-glow text-black hover:bg-q-glow/90 rounded-lg text-sm font-semibold transition-all shadow-[0_0_15px_rgba(0,255,157,0.3)]"
-                >
-                  Deploy Rule
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        </motion.div>
       )}
+
+      <AnimatePresence>
+        {showModal && (
+          <CreatePolicyModal onClose={() => setShowModal(false)} onCreated={handleCreated} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
