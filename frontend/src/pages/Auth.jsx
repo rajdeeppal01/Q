@@ -103,7 +103,7 @@ export const Auth = ({ onLogin }) => {
       `}</style>
 
       <div style={{ marginBottom: '2.5rem' }}>
-        <span style={{ color: '#8b8b99' }}>/Q/agents &gt;</span> {isLogin ? './login' : './signup'}
+        <span style={{ color: '#8b8b99' }}>&gt;</span> {isLogin ? './login' : './signup'}
       </div>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem', width: '100%', maxWidth: '450px' }}>
