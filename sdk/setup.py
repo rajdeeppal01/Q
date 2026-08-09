@@ -6,7 +6,7 @@ Install with: pip install -e ./sdk
 from setuptools import setup, find_packages
 
 setup(
-    name="q-sdk",
+    name="q-agent-sdk",
     version="0.1.0",
     description="Q SDK — Instrument any AI agent with security governance",
     long_description=open("README.md").read() if __import__("os").path.exists("README.md") else "",
