@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import SetupAnimation from '../components/SetupAnimation';
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 280, damping: 22 } } };
@@ -16,26 +17,8 @@ export default function SetupGuide() {
         </p>
       </div>
 
-      <div style={{
-        width: '100%',
-        aspectRatio: '16/9',
-        background: '#0a0a0c',
-        border: '1px solid #27272a',
-        borderRadius: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: '2rem',
-        position: 'relative',
-        overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
-      }}>
-        <div style={{ position: 'absolute', top: 12, left: 16, color: '#666', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
-          Q_setup_demo.mp4
-        </div>
-        <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(255, 87, 34, 0.15)', border: '1px solid #FF5722', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 0 20px rgba(255, 87, 34, 0.2)' }}>
-          <div style={{ width: 0, height: 0, borderTop: '12px solid transparent', borderBottom: '12px solid transparent', borderLeft: '18px solid #FF5722', marginLeft: 6 }}></div>
-        </div>
+      <div style={{ marginBottom: '2rem' }}>
+        <SetupAnimation />
       </div>
 
       <motion.div variants={container} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
