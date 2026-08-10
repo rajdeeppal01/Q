@@ -44,16 +44,16 @@ export const Auth = ({ onLogin }) => {
   };
 
   return (
-    <div style={{
+    <div className="landing-container" style={{
       minHeight: '100vh',
       color: '#d4d4d8',
       fontFamily: 'var(--font-mono)',
       fontSize: '1.2rem',
-      padding: '25vh 20vw',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
+      backgroundColor: '#260404'
     }}>
       <style>{`
         @keyframes blink {
@@ -64,7 +64,7 @@ export const Auth = ({ onLogin }) => {
           background: transparent;
           border: none;
           border-bottom: 1px solid transparent;
-          color: var(--accent);
+          color: #FF5722;
           font-family: var(--font-mono);
           font-size: 1.2rem;
           outline: none;
@@ -73,7 +73,7 @@ export const Auth = ({ onLogin }) => {
           transition: border-color 0.2s;
         }
         .term-input:focus {
-          border-bottom: 1px solid var(--accent);
+          border-bottom: 1px solid #FF5722;
         }
         .term-input::placeholder {
           color: #555566;
@@ -81,7 +81,7 @@ export const Auth = ({ onLogin }) => {
         .term-btn {
           background: transparent;
           border: none;
-          color: var(--accent);
+          color: #FF5722;
           font-family: var(--font-mono);
           font-size: 1.2rem;
           cursor: pointer;
