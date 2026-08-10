@@ -8,7 +8,7 @@ export default function Landing() {
 
   return (
     <>
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0 }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0, backgroundColor: '#260404' }}>
         <Antigravity
           count={300}
           magnetRadius={10}
@@ -17,7 +17,7 @@ export default function Landing() {
           waveAmplitude={1}
           particleSize={2}
           lerpSpeed={0.1}
-          color="#00E5FF"
+          color="#FF5722"
           autoAnimate={true}
           particleVariance={1}
           rotationSpeed={0.1}
