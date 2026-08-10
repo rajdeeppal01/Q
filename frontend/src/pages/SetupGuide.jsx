@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Shield, Bot, Code } from 'lucide-react';
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 280, damping: 22 } } };
@@ -21,9 +20,6 @@ export default function SetupGuide() {
         
         {/* Step 1 */}
         <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid rgba(245,158,11,0.3)' }}>
-            <Bot size={24} color="#F59E0B" />
-          </div>
           <div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#F59E0B', marginBottom: '0.5rem' }}>1. Register Agent & Get API Key</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
@@ -37,9 +33,6 @@ export default function SetupGuide() {
 
         {/* Step 2 */}
         <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(0,229,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid var(--border-accent)' }}>
-            <Code size={24} color="var(--accent)" />
-          </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.5rem' }}>2. Decorate & Govern</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
@@ -66,9 +59,6 @@ refund_user(<span style={{ color: '#98c379' }}>"usr_123"</span>, <span style={{ 
 
         {/* Step 3 */}
         <motion.div variants={item} className="glass-card" style={{ display: 'flex', gap: '1.5rem' }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid rgba(16,185,129,0.3)' }}>
-            <Shield size={24} color="#10B981" />
-          </div>
           <div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#10B981', marginBottom: '0.5rem' }}>3. Define your Policies</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1rem' }}>
