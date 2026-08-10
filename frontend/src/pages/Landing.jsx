@@ -6,12 +6,11 @@ export default function Landing() {
   const [view, setView] = useState('home');
 
   return (
-    <div style={{
+    <div className="landing-container" style={{
       minHeight: '100vh',
       color: '#d4d4d8',
       fontFamily: 'var(--font-mono)',
       fontSize: '1.2rem',
-      padding: '25vh 20vw',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',

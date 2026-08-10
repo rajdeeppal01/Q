@@ -462,6 +462,11 @@ h4 { font-size: 1.1rem; }
   .compliance-detail-grid { grid-template-columns: 1fr; }
 }
 
+.landing-container { padding: 25vh 20vw; }
+@media (max-width: 768px) {
+  .landing-container { padding: 15vh 5vw; }
+}
+
 /* --- Mobile Specific Layout --- */
 .mobile-header {
   display: none;

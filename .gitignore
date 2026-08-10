@@ -11,6 +11,7 @@ build/
 venv/
 .venv/
 env/
+venv_312/
 
 # Node
 node_modules/
