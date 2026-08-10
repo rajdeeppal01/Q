@@ -1,21 +1,45 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Antigravity from '../components/Antigravity';
 
 export default function Landing() {
   const navigate = useNavigate();
   const [view, setView] = useState('home');
 
   return (
-    <div className="landing-container" style={{
-      minHeight: '100vh',
-      color: '#d4d4d8',
-      fontFamily: 'var(--font-mono)',
-      fontSize: '1.2rem',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start'
-    }}>
+    <>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 0 }}>
+        <Antigravity
+          count={300}
+          magnetRadius={10}
+          ringRadius={10}
+          waveSpeed={0.4}
+          waveAmplitude={1}
+          particleSize={2}
+          lerpSpeed={0.1}
+          color="#00E5FF"
+          autoAnimate={true}
+          particleVariance={1}
+          rotationSpeed={0.1}
+          depthFactor={1}
+          pulseSpeed={3}
+          particleShape="capsule"
+          fieldStrength={10}
+        />
+      </div>
+      <div className="landing-container" style={{
+        minHeight: '100vh',
+        color: '#d4d4d8',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '1.2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        position: 'relative',
+        zIndex: 1,
+        pointerEvents: 'none'
+      }}>
       <style>{`
         @keyframes blink {
           0%, 100% { opacity: 1; }
@@ -52,7 +76,7 @@ export default function Landing() {
 
       {view === 'home' && (
         <>
-          <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '2.5rem' }}>
+          <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '2.5rem', pointerEvents: 'auto' }}>
             <span className="term-link" onClick={() => setView('meet_q')}>meet_q/</span>
             <span className="term-link" onClick={() => setView('features')}>features/</span>
             <span className="term-link" onClick={() => setView('how_to')}>how_to/</span>
@@ -83,7 +107,7 @@ export default function Landing() {
               Total autonomy, with total control.
             </div>
             <br />
-            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+            <span className="term-link" onClick={() => setView('home')} style={{ pointerEvents: 'auto' }}>&lt; cd ..</span>
           </div>
         </>
       )}
@@ -112,7 +136,7 @@ export default function Landing() {
               Real-time auditing mapped to NIST AI RMF & OWASP Agentic Top 10 standards.
             </div>
             <br />
-            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+            <span className="term-link" onClick={() => setView('home')} style={{ pointerEvents: 'auto' }}>&lt; cd ..</span>
           </div>
         </>
       )}
@@ -164,11 +188,12 @@ export default function Landing() {
             </div>
             
             <br />
-            <span className="term-link" onClick={() => setView('home')}>&lt; cd ..</span>
+            <span className="term-link" onClick={() => setView('home')} style={{ pointerEvents: 'auto' }}>&lt; cd ..</span>
           </div>
         </>
       )}
 
-    </div>
+      </div>
+    </>
   );
 }
