@@ -14,6 +14,7 @@ import AuditTrail from './pages/AuditTrail';
 import Alerts from './pages/Alerts';
 import SetupGuide from './pages/SetupGuide';
 import { api } from './api/client';
+import DecryptedText from './components/DecryptedText';
 
 
 function AppLayout({ onLogout }) {
@@ -110,7 +111,25 @@ export default function App() {
   }, []);
 
   if (isLoading) {
-    return <div className="min-h-screen bg-q-bg flex items-center justify-center text-q-glow animate-pulse">Loading Q Platform...</div>;
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#260404',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'var(--font-mono)',
+        fontSize: '1.5rem',
+        color: '#FF5722'
+      }}>
+        <DecryptedText
+          text="Loading Q..."
+          speed={60}
+          maxIterations={20}
+          characters="Q01X!@#$%^&*"
+        />
+      </div>
+    );
   }
 
   return (
