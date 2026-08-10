@@ -46,7 +46,7 @@ export default function Landing() {
           50% { opacity: 0; }
         }
         .term-link {
-          color: var(--accent);
+          color: #FF5722;
           cursor: pointer;
           text-decoration: none;
           transition: opacity 0.2s;
@@ -76,7 +76,7 @@ export default function Landing() {
 
       {view === 'home' && (
         <>
-          <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '2.5rem', pointerEvents: 'auto' }}>
+          <div style={{ color: '#FF5722', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '2.5rem', pointerEvents: 'auto' }}>
             <span className="term-link" onClick={() => setView('meet_q')}>meet_q/</span>
             <span className="term-link" onClick={() => setView('features')}>features/</span>
             <span className="term-link" onClick={() => setView('how_to')}>how_to/</span>
