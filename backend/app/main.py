@@ -34,12 +34,12 @@ logger = logging.getLogger("q")
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
     # Create all tables on startup
-    logger.info("🛡️  Q is initializing...")
+    logger.info("  Q is initializing...")
     Base.metadata.create_all(bind=engine)
-    logger.info("✅ Database tables created/verified")
-    logger.info(f"🚀 Q v{settings.APP_VERSION} is online")
+    logger.info(" Database tables created/verified")
+    logger.info(f" Q v{settings.APP_VERSION} is online")
     yield
-    logger.info("🛡️  Q is shutting down...")
+    logger.info("  Q is shutting down...")
 
 
 # --- App ---

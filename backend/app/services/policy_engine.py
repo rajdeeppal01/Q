@@ -237,7 +237,7 @@ async def apply_policy_verdict(
         agent = db.execute(select(Agent).where(Agent.id == ctx.agent_id)).scalars().first()
         if agent and agent.status not in ("revoked", "quarantined"):
             agent.status = "quarantined"
-            logger.warning(f"🔒 Agent {ctx.agent_id} AUTO-QUARANTINED by policy engine")
+            logger.warning(f" Agent {ctx.agent_id} AUTO-QUARANTINED by policy engine")
 
     # 4. Create an Alert for block / quarantine / high-severity violations
     if result.action in ("block", "quarantine") or any(

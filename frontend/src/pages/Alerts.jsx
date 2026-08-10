@@ -12,12 +12,12 @@ const SEV = {
 };
 
 const TYPE_ICONS = {
-  anomaly_detected:    { icon: '🔬', label: 'Anomaly' },
-  policy_violation:    { icon: '🚫', label: 'Policy Violation' },
+  anomaly_detected:    { icon: '', label: 'Anomaly' },
+  policy_violation:    { icon: '', label: 'Policy Violation' },
   rogue_behavior:      { icon: '', label: 'Rogue Behavior' },
-  credential_expiry:   { icon: '🔑', label: 'Credential Expiry' },
+  credential_expiry:   { icon: '', label: 'Credential Expiry' },
   rate_limit_exceeded: { icon: '', label: 'Rate Limit' },
-  exfiltration:        { icon: '📤', label: 'Data Exfiltration' },
+  exfiltration:        { icon: '', label: 'Data Exfiltration' },
 };
 
 const STATUS_CFG = {
@@ -57,7 +57,7 @@ function AlertCard({ alert, onUpdate }) {
   const [updating, setUpdating] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const sev  = SEV[alert.severity] || SEV.low;
-  const type = TYPE_ICONS[alert.alert_type] || { icon: '🔔', label: alert.alert_type };
+  const type = TYPE_ICONS[alert.alert_type] || { icon: '', label: alert.alert_type };
   const time = alert.created_at ? new Date(alert.created_at).toLocaleString() : '—';
 
   const handleStatus = async (newStatus) => {
@@ -73,8 +73,8 @@ function AlertCard({ alert, onUpdate }) {
   };
 
   const nextActions = {
-    open:           [{ label: '🔍 Investigate', status: 'investigating', style: 'amber' }, { label: '✓ Resolve', status: 'resolved', style: 'green' }, { label: '❌ False Positive', status: 'false_positive', style: 'ghost' }],
-    investigating:  [{ label: '✓ Resolve', status: 'resolved', style: 'green' }, { label: '❌ False Positive', status: 'false_positive', style: 'ghost' }],
+    open:           [{ label: ' Investigate', status: 'investigating', style: 'amber' }, { label: '✓ Resolve', status: 'resolved', style: 'green' }, { label: ' False Positive', status: 'false_positive', style: 'ghost' }],
+    investigating:  [{ label: '✓ Resolve', status: 'resolved', style: 'green' }, { label: ' False Positive', status: 'false_positive', style: 'ghost' }],
     resolved:       [{ label: '↺ Reopen', status: 'open', style: 'ghost' }],
     false_positive: [{ label: '↺ Reopen', status: 'open', style: 'ghost' }],
   };
@@ -124,7 +124,7 @@ function AlertCard({ alert, onUpdate }) {
 
         <SeverityBadge sev={alert.severity} />
         <StatusDot status={alert.status} />
-        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', transition: 'transform 0.2s', transform: expanded ? 'rotate(90deg)' : 'none' }}>▶</span>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', transition: 'transform 0.2s', transform: expanded ? 'rotate(90deg)' : 'none' }}></span>
       </div>
 
       {/* Expanded detail */}

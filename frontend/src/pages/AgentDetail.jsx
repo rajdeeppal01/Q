@@ -20,12 +20,12 @@ const RISK_CFG = {
 };
 
 const TYPE_ICONS = {
-  tool_call:   { icon: '🔧', color: '#00F0FF' },
+  tool_call:   { icon: '', color: '#00F0FF' },
   llm_invoke:  { icon: '', color: '#A855F7' },
   data_access: { icon: '', color: '#F59E0B' },
-  error:       { icon: '❌', color: '#EF4444' },
-  heartbeat:   { icon: '💓', color: '#10B981' },
-  decision:    { icon: '🧠', color: '#6366F1' },
+  error:       { icon: '', color: '#EF4444' },
+  heartbeat:   { icon: '', color: '#10B981' },
+  decision:    { icon: '', color: '#6366F1' },
 };
 
 const RISK_ORDER = ['critical', 'high', 'medium', 'low'];
@@ -268,7 +268,7 @@ export default function AgentDetail() {
                 onClick={() => handleStatus('paused')}
                 style={{ padding: '0.4rem 0.875rem', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', border: '1px solid rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.08)', color: '#F59E0B', transition: 'all 0.15s' }}
               >
-                {confirmAction === 'paused' ? ' Confirm Pause?' : '⏸ Pause'}
+                {confirmAction === 'paused' ? ' Confirm Pause?' : ' Pause'}
               </button>
             )}
             {agent.status === 'paused' && (
@@ -277,7 +277,7 @@ export default function AgentDetail() {
                 onClick={() => handleStatus('active')}
                 style={{ padding: '0.4rem 0.875rem', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', border: '1px solid rgba(16,185,129,0.4)', background: 'rgba(16,185,129,0.08)', color: '#10B981', transition: 'all 0.15s' }}
               >
-                ▶ Activate
+                 Activate
               </button>
             )}
             {agent.status !== 'quarantined' && (
@@ -294,7 +294,7 @@ export default function AgentDetail() {
               onClick={handleRotateKey}
               style={{ padding: '0.4rem 0.875rem', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', border: '1px solid var(--border-default)', background: 'transparent', color: 'var(--text-secondary)', transition: 'all 0.15s' }}
             >
-              🔑 Rotate Key
+               Rotate Key
             </button>
           </div>
         </div>
@@ -362,7 +362,7 @@ export default function AgentDetail() {
           {/* Tool Usage */}
           {stats?.tool_usage?.length > 0 && (
             <div className="glass-card" style={{ padding: '1.25rem' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}>🔧 Top Tool Calls</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}> Top Tool Calls</div>
               {stats.tool_usage.map(t => (
                 <ToolBar key={t.tool} tool={t.tool} count={t.count} max={maxTool} />
               ))}
@@ -372,7 +372,7 @@ export default function AgentDetail() {
           {/* Permissions */}
           {agent.permissions && Object.keys(agent.permissions).length > 0 && (
             <div className="glass-card" style={{ padding: '1.25rem' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}>🔐 Permissions Scope</div>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '1rem' }}> Permissions Scope</div>
               <pre style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)', whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0 }}>
                 {JSON.stringify(agent.permissions, null, 2)}
               </pre>

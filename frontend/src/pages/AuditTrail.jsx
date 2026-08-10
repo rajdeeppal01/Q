@@ -15,12 +15,12 @@ const RISK_CFG = {
 };
 
 const TYPE_ICONS = {
-  tool_call:   '🔧',
+  tool_call:   '',
   llm_invoke:  '',
   data_access: '',
-  error:       '❌',
-  heartbeat:   '💓',
-  decision:    '🧠',
+  error:       '',
+  heartbeat:   '',
+  decision:    '',
 };
 
 const RISK_LEVELS  = ['low', 'medium', 'high', 'critical'];
@@ -168,7 +168,7 @@ function TraceGroup({ traceId, events, selectedId, onSelect }) {
         onMouseOver={e => { if (!open) e.currentTarget.style.background = 'var(--bg-elevated)'; }}
         onMouseOut={e => { if (!open) e.currentTarget.style.background = 'transparent'; }}
       >
-        <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem', transition: 'transform 0.2s', display: 'inline-block', transform: open ? 'rotate(90deg)' : 'none' }}>▶</span>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem', transition: 'transform 0.2s', display: 'inline-block', transform: open ? 'rotate(90deg)' : 'none' }}></span>
         <div>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent)' }}>{traceId}</span>
           <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginLeft: 8 }}>{events.length} events</span>
@@ -332,7 +332,7 @@ export default function AuditTrail() {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button onClick={handleExport} className="btn btn-ghost btn-sm" style={{ gap: 6, display: 'flex', alignItems: 'center' }}>
-            ⬇ Export CSV
+             Export CSV
           </button>
           <button onClick={fetchEvents} className="btn btn-ghost btn-sm" style={{ gap: 6, display: 'flex', alignItems: 'center' }}>
             ↺ Refresh
@@ -407,7 +407,7 @@ export default function AuditTrail() {
             color: groupByTrace ? '#A855F7' : 'var(--text-secondary)', transition: 'all 0.15s',
           }}
         >
-          {groupByTrace ? '📦 Trace View' : '📋 Flat View'}
+          {groupByTrace ? ' Trace View' : ' Flat View'}
         </button>
 
         <span style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
@@ -441,7 +441,7 @@ export default function AuditTrail() {
             </div>
           ) : data.events.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--text-muted)', gap: 8 }}>
-              <span style={{ fontSize: '2rem' }}>📋</span>
+              <span style={{ fontSize: '2rem' }}></span>
               <span>No events found for this filter combination</span>
             </div>
           ) : groupByTrace ? (

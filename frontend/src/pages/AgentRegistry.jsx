@@ -17,7 +17,7 @@ const RISK_CONFIG = {
 
 const STATUS_CONFIG = {
   active:      { color: '#10B981', bg: 'rgba(16,185,129,0.1)',  icon: '●', label: 'Active' },
-  paused:      { color: '#F59E0B', bg: 'rgba(245,158,11,0.1)',  icon: '⏸', label: 'Paused' },
+  paused:      { color: '#F59E0B', bg: 'rgba(245,158,11,0.1)',  icon: '', label: 'Paused' },
   revoked:     { color: '#EF4444', bg: 'rgba(239,68,68,0.1)',   icon: '✕', label: 'Revoked' },
   quarantined: { color: '#A855F7', bg: 'rgba(168,85,247,0.1)',  icon: '', label: 'Quarantined' },
 };

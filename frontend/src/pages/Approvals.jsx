@@ -5,12 +5,12 @@ import { api } from '../api/client';
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const RISK_ICONS = {
-  tool_call:   '🔧',
+  tool_call:   '',
   data_access: '',
-  api_call:    '🌐',
+  api_call:    '',
   file_write:  '',
   execute:     '',
-  transfer:    '💸',
+  transfer:    '',
 };
 
 function timeAgo(dateStr) {
@@ -80,7 +80,7 @@ function ApprovalCard({ approval, onReview }) {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
               <span style={{ padding: '2px 8px', borderRadius: 999, fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)' }}>
-                ⏸ Pending Approval
+                 Pending Approval
               </span>
               {remaining && (
                 <span style={{ fontSize: '0.7rem', color: isExpiring ? '#EF4444' : 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
@@ -151,7 +151,7 @@ function ApprovalCard({ approval, onReview }) {
               onClick={() => setShowContext(s => !s)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', fontSize: '0.75rem', fontWeight: 600, padding: 0, display: 'flex', alignItems: 'center', gap: 4 }}
             >
-              <span style={{ transition: 'transform 0.2s', display: 'inline-block', transform: showContext ? 'rotate(90deg)' : 'none' }}>▶</span>
+              <span style={{ transition: 'transform 0.2s', display: 'inline-block', transform: showContext ? 'rotate(90deg)' : 'none' }}></span>
               {showContext ? 'Hide' : 'Show'} Execution Context
             </button>
             <AnimatePresence>
@@ -257,7 +257,7 @@ export function Approvals() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)', flexShrink: 0 }}>
         {[
-          { label: 'Pending', value: approvals.length, color: '#F59E0B', emoji: '⏸' },
+          { label: 'Pending', value: approvals.length, color: '#F59E0B', emoji: '' },
           { label: 'Avg Wait',  value: slaAvg ? (slaAvg < 60 ? `${slaAvg}s` : `${Math.floor(slaAvg/60)}m`) : '—', color: 'var(--accent)', emoji: '' },
           { label: 'Actioned Today', value: history.length, color: '#10B981', emoji: '✓' },
         ].map(s => (

@@ -12,12 +12,12 @@ const RISK_COLORS = {
 };
 
 const EVENT_TYPE_ICONS = {
-  tool_call:   '🔧',
+  tool_call:   '',
   llm_invoke:  '',
   data_access: '',
-  error:       '❌',
-  heartbeat:   '💓',
-  decision:    '🧠',
+  error:       '',
+  heartbeat:   '',
+  decision:    '',
   default:     '',
 };
 // --- Event Row ---
@@ -253,7 +253,7 @@ function StatsBar({ events, wsConnected, paused }) {
       </span>
       {paused && (
         <span style={{ marginLeft: 'auto', color: '#F59E0B', fontWeight: 700, fontSize: '0.72rem', background: 'rgba(245,158,11,0.1)', padding: '2px 10px', borderRadius: 999, border: '1px solid rgba(245,158,11,0.3)' }}>
-          ⏸ PAUSED
+           PAUSED
         </span>
       )}
     </div>
@@ -333,14 +333,14 @@ export default function LiveMonitor() {
             className={paused ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'}
             style={{ gap: 6, display: 'flex', alignItems: 'center' }}
           >
-            {paused ? '▶ Resume' : '⏸ Pause'}
+            {paused ? ' Resume' : ' Pause'}
           </button>
           <button
             onClick={() => setEvents([])}
             className="btn btn-ghost btn-sm"
             style={{ gap: 6, display: 'flex', alignItems: 'center', color: 'var(--text-muted)' }}
           >
-            🗑 Clear
+             Clear
           </button>
         </div>
       </div>
