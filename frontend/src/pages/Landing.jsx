@@ -94,6 +94,15 @@ export default function Landing() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2.5rem', fontSize: '1rem', maxWidth: '600px', color: '#a1a1aa' }}>
+            <div style={{ fontStyle: 'italic', color: '#8b8b99', borderLeft: '2px solid #FF5722', paddingLeft: '1rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+              "I can do more damage on my laptop sitting in my pajamas before my first cup of Earl Grey than you can do in a year in the field."<br/>
+              <span style={{ fontSize: '0.85rem', color: '#FF5722', fontWeight: 600, marginTop: '0.5rem', display: 'block' }}>— Q (Skyfall)</span>
+            </div>
+            
+            <div style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
+              AI agents are our new 00-section. They are autonomous, highly capable, and extremely dangerous if left unchecked. Hence the need for Q.
+            </div>
+
             <div style={{ color: '#ffffff', fontWeight: 600, marginBottom: '0.5rem' }}>THE PROBLEM:</div>
             <div style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
               We unleashed autonomous AI agents, but quickly realized they have no brakes. When an LLM is connected to your database, your Stripe account, or your AWS infrastructure, a single prompt injection or hallucination can cause catastrophic damage. Agents can exfiltrate data, delete databases, and run up massive cloud bills in seconds.
