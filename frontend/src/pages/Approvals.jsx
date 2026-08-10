@@ -180,14 +180,6 @@ function ApprovalCard({ approval, onReview }) {
 function EmptyState() {
   return (
     <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 300, gap: 16, textAlign: 'center' }}>
-      <div style={{
-        width: 72, height: 72, borderRadius: 18,
-        background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem',
-        boxShadow: '0 0 30px rgba(16,185,129,0.15)',
-      }}>
-        
-      </div>
       <div>
         <h3 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: 6, color: '#10B981' }}>Inbox Zero</h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', maxWidth: 340, lineHeight: 1.5 }}>

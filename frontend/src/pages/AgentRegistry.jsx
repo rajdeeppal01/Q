@@ -467,13 +467,8 @@ function EmptyState({ onRegister }) {
       }}
     >
       <div style={{
-        width: 80, height: 80, borderRadius: 20,
-        background: 'linear-gradient(135deg, rgba(0,229,255,0.15), rgba(168,85,247,0.15))',
-        border: '1px solid var(--border-accent)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 0 40px rgba(0,229,255,0.1)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center'
       }}>
-        <Bot size={36} color="var(--accent)" />
       </div>
       <div>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No Agents Registered</h3>
