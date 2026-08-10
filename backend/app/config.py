@@ -23,6 +23,11 @@ class Settings(BaseSettings):
 
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"
+    ALLOWED_ORIGINS: list[str] = [
+        "http://localhost:5173",
+        "https://q-f8z0.onrender.com",
+        "https://q-five-bice.vercel.app"
+    ]
 
     # AI
     GEMINI_API_KEY: Optional[str] = None

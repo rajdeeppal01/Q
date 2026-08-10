@@ -3,15 +3,18 @@ Q — Events API
 Telemetry ingestion from instrumented agents.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Header
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Header, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import Optional, Any
 from datetime import datetime, timezone
 from pydantic import BaseModel
 import logging
+import hashlib
 
 from app.database import get_db
+from app.config import settings
+from app.limiter import limiter
 from app.models.agent import Agent
 from app.models.event import Event
 from app.models.alert import Alert
@@ -76,7 +79,9 @@ def process_event_background(event_data: dict, agent_id: str, db: Session):
 # --- Endpoints ---
 
 @router.post("/ingest")
+@limiter.limit(settings.RATE_LIMIT_EVENTS)
 async def ingest_event(
+    request: Request,
     event: TelemetryEvent,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
@@ -87,15 +92,30 @@ async def ingest_event(
     Stores the event, broadcasts it via WebSockets, and runs anomaly detection.
     """
     if not event.agent_id:
-        # Fallback for anonymous agents, ideally block in prod
-        pass
-    else:
-        agent = db.execute(select(Agent).where(Agent.id == event.agent_id)).scalars().first()
-        if not agent:
-            raise HTTPException(status_code=404, detail="Agent not found")
-        
-        if agent.status in ["revoked", "quarantined"]:
-            raise HTTPException(status_code=403, detail=f"Agent is {agent.status}")
+        raise HTTPException(status_code=400, detail="Missing agent_id")
+
+    if not x_q_api_key:
+        raise HTTPException(status_code=401, detail="Missing x-q-api-key header")
+
+    agent = db.execute(select(Agent).where(Agent.id == event.agent_id)).scalars().first()
+    if not agent:
+        raise HTTPException(status_code=404, detail="Agent not found")
+    
+    if agent.status in ["revoked", "quarantined"]:
+        raise HTTPException(status_code=403, detail=f"Agent is {agent.status}")
+
+    # Validate API Key
+    api_key_hash_val = hashlib.sha256(x_q_api_key.encode()).hexdigest()
+    identity = db.execute(
+        select(AgentIdentity).where(
+            AgentIdentity.agent_id == event.agent_id,
+            AgentIdentity.api_key_hash == api_key_hash_val,
+            AgentIdentity.is_active == True
+        )
+    ).scalars().first()
+    
+    if not identity:
+        raise HTTPException(status_code=401, detail="Invalid or revoked API key")
 
     # Store event in DB
     db_event = Event(

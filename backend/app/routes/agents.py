@@ -3,7 +3,7 @@ Q — Agents API
 Registration, CRUD, and identity management for governed AI agents.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status, Header, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List, Optional
@@ -17,6 +17,8 @@ from app.models.agent import Agent
 from app.models.identity import AgentIdentity
 from app.routes.auth import get_current_user
 from pydantic import BaseModel
+from app.config import settings
+from app.limiter import limiter
 
 router = APIRouter(prefix="/agents", tags=["Agents"])
 
@@ -52,7 +54,9 @@ class AgentStatusUpdate(BaseModel):
 # --- Endpoints ---
 
 @router.post("/register", response_model=AgentResponse)
+@limiter.limit(settings.RATE_LIMIT_AUTH)
 def register_agent(
+    request: Request,
     agent_data: AgentCreate,
     db: Session = Depends(get_db),
     # For MVP, we might allow SDK auto-registration without user auth, 
@@ -184,17 +188,32 @@ def rotate_agent_key(
 
 
 @router.post("/{agent_id}/heartbeat")
+@limiter.limit(settings.RATE_LIMIT_EVENTS)
 def agent_heartbeat(
+    request: Request,
     agent_id: str,
     db: Session = Depends(get_db),
     x_q_api_key: Optional[str] = Header(None)
 ):
     """SDK calls this periodically to indicate the agent is alive."""
+    if not x_q_api_key:
+        raise HTTPException(status_code=401, detail="Missing x-q-api-key header")
+
     agent = db.execute(select(Agent).where(Agent.id == agent_id)).scalars().first()
     if not agent:
         raise HTTPException(status_code=404, detail="Agent not found")
         
-    # Ideally, validate the API key here
+    api_key_hash_val = hashlib.sha256(x_q_api_key.encode()).hexdigest()
+    identity = db.execute(
+        select(AgentIdentity).where(
+            AgentIdentity.agent_id == agent_id,
+            AgentIdentity.api_key_hash == api_key_hash_val,
+            AgentIdentity.is_active == True
+        )
+    ).scalars().first()
+    
+    if not identity:
+        raise HTTPException(status_code=401, detail="Invalid or revoked API key")
     agent.last_heartbeat = datetime.now(timezone.utc)
     db.commit()
     return {"status": "alive"}
