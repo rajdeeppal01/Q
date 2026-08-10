@@ -117,7 +117,8 @@ function EventDetail({ event, onClose }) {
       exit={{ opacity: 0, x: 40 }}
       transition={{ type: 'spring', stiffness: 300, damping: 26 }}
       style={{
-        width: 360,
+        width: '100%',
+        maxWidth: 360,
         flexShrink: 0,
         background: 'var(--bg-card)',
         borderLeft: `1px solid ${risk.color}40`,
@@ -125,6 +126,7 @@ function EventDetail({ event, onClose }) {
         flexDirection: 'column',
         overflow: 'hidden',
       }}
+      className="event-detail-panel"
     >
       {/* Header */}
       <div style={{
@@ -401,48 +403,52 @@ export default function LiveMonitor() {
           {/* Stats bar */}
           <StatsBar events={events} wsConnected={wsConnected} paused={paused} />
 
-          {/* Column headers */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '28px 1fr 120px 80px 80px 70px 60px',
-            gap: '0.75rem',
-            padding: '0.5rem 1rem',
-            borderBottom: '1px solid var(--border-subtle)',
-            background: 'var(--bg-surface)',
-            fontSize: '0.68rem',
-            color: 'var(--text-muted)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            fontWeight: 600,
-            flexShrink: 0,
-          }}>
-            <span />
-            <span>Tool / Agent</span>
-            <span>Type</span>
-            <span>Risk</span>
-            <span>Policy</span>
-            <span style={{ textAlign: 'right' }}>Latency</span>
-            <span style={{ textAlign: 'right' }}>Time</span>
-          </div>
-
-          {/* Scrollable event list */}
-          <div ref={feedRef} style={{ flex: 1, overflowY: 'auto' }}>
-            {filtered.length === 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--text-muted)', fontSize: '0.875rem', gap: '0.5rem' }}>
-                 Waiting for events...
+          <div className="table-responsive-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ minWidth: 800, flex: 1, display: 'flex', flexDirection: 'column' }}>
+              {/* Column headers */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '28px 1fr 120px 80px 80px 70px 60px',
+                gap: '0.75rem',
+                padding: '0.5rem 1rem',
+                borderBottom: '1px solid var(--border-subtle)',
+                background: 'var(--bg-surface)',
+                fontSize: '0.68rem',
+                color: 'var(--text-muted)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                fontWeight: 600,
+                flexShrink: 0,
+              }}>
+                <span />
+                <span>Tool / Agent</span>
+                <span>Type</span>
+                <span>Risk</span>
+                <span>Policy</span>
+                <span style={{ textAlign: 'right' }}>Latency</span>
+                <span style={{ textAlign: 'right' }}>Time</span>
               </div>
-            ) : (
-              <AnimatePresence initial={false}>
-                {filtered.map((ev) => (
-                  <EventRow
-                    key={ev.id}
-                    event={ev}
-                    onClick={setSelectedEvent}
-                    isSelected={selectedEvent?.id === ev.id}
-                  />
-                ))}
-              </AnimatePresence>
-            )}
+
+              {/* Scrollable event list */}
+              <div ref={feedRef} style={{ flex: 1, overflowY: 'auto' }}>
+                {filtered.length === 0 ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 200, color: 'var(--text-muted)', fontSize: '0.875rem', gap: '0.5rem' }}>
+                     Waiting for events...
+                  </div>
+                ) : (
+                  <AnimatePresence initial={false}>
+                    {filtered.map((ev) => (
+                      <EventRow
+                        key={ev.id}
+                        event={ev}
+                        onClick={setSelectedEvent}
+                        isSelected={selectedEvent?.id === ev.id}
+                      />
+                    ))}
+                  </AnimatePresence>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 

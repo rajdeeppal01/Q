@@ -244,7 +244,7 @@ export default function Compliance() {
       </motion.div>
 
       {/* Framework cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-md)', marginBottom: 'var(--space-lg)' }}>
+      <div className="grid grid-3 gap-md" style={{ marginBottom: 'var(--space-lg)' }}>
         {['nist', 'owasp', 'iso'].map(fw => (
           <FrameworkCard key={fw} fwKey={fw} data={d[fw]} selected={activeTab === fw} onClick={() => setActiveTab(fw)} />
         ))}
@@ -256,7 +256,7 @@ export default function Compliance() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 'var(--space-md)' }}
+        className="compliance-detail-grid"
       >
         {/* Controls list */}
         <div className="glass-card">

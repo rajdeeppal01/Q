@@ -136,7 +136,7 @@ const navItems = [
 ];
 
 // ─── Sidebar ─────────────────────────────────────────────────────────────────
-export default function Sidebar({ onLogout }) {
+export default function Sidebar({ onLogout, isOpen, onClose }) {
   const location = useLocation();
   const [counts, setCounts] = useState({ alerts: 0, approvals: 0 });
 
@@ -160,7 +160,7 @@ export default function Sidebar({ onLogout }) {
   }, [fetchCounts]);
 
   return (
-    <nav className="sidebar">
+    <nav className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
       {/* Logo */}
       <NavLink to="/dashboard" style={{ textDecoration: 'none', color: 'inherit' }}>
         <div style={{ padding: 'var(--space-lg)', borderBottom: '1px solid var(--border-subtle)', cursor: 'pointer' }}>
@@ -177,6 +177,17 @@ export default function Sidebar({ onLogout }) {
                 /agents/
               </div>
             </div>
+            {onClose && (
+              <button 
+                className="sidebar-close-btn" 
+                onClick={(e) => { e.preventDefault(); onClose(); }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </NavLink>

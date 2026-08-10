@@ -238,7 +238,8 @@ export default function Dashboard() {
 
       {/* Zone 3 — Bottom Panel */}
       <motion.div
-        style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 'var(--space-md)', marginTop: 'var(--space-md)' }}
+        className="grid grid-3 gap-md"
+        style={{ marginTop: 'var(--space-md)' }}
         variants={container} initial="hidden" animate="show"
       >
         {/* Live Event Feed */}

@@ -228,48 +228,50 @@ export const Policies = () => {
         <EmptyState onCreate={() => setShowModal(true)} />
       ) : (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)', fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Rule Name</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Condition</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Action</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Status</th>
-                <th style={{ padding: '0.75rem 1rem', fontWeight: 600, textAlign: 'right' }}>Manage</th>
-              </tr>
-            </thead>
-            <tbody>
-              {policies.map(policy => (
-                <tr key={policy.id} style={{ borderBottom: '1px solid var(--border-subtle)', fontSize: '0.8125rem', transition: 'background 0.15s' }}>
-                  <td style={{ padding: '0.75rem 1rem', fontWeight: 500, color: 'var(--text-primary)' }}>{policy.name}</td>
-                  <td style={{ padding: '0.75rem 1rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
-                    tool == "{policy.conditions.tool_name}"
-                  </td>
-                  <td style={{ padding: '0.75rem 1rem' }}>
-                    {policy.actions.type === 'block' ? (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'rgba(239,68,68,0.1)', color: '#EF4444', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(239,68,68,0.2)' }}>
-                        <AlertTriangle size={12} /> Block
-                      </span>
-                    ) : (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'rgba(245,158,11,0.1)', color: '#F59E0B', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(245,158,11,0.2)' }}>
-                        <ShieldCheck size={12} /> Require Approval
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ padding: '0.75rem 1rem' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#10B981', fontSize: '0.75rem', fontWeight: 600 }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B981' }} /> Active
-                    </span>
-                  </td>
-                  <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
-                    <button onClick={() => handleDelete(policy.id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'inline-flex', padding: 4 }}>
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
+          <div className="table-responsive-wrapper">
+            <table style={{ width: '100%', minWidth: 600, borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)', fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Rule Name</th>
+                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Condition</th>
+                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Action</th>
+                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>Status</th>
+                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, textAlign: 'right' }}>Manage</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {policies.map(policy => (
+                  <tr key={policy.id} style={{ borderBottom: '1px solid var(--border-subtle)', fontSize: '0.8125rem', transition: 'background 0.15s' }}>
+                    <td style={{ padding: '0.75rem 1rem', fontWeight: 500, color: 'var(--text-primary)' }}>{policy.name}</td>
+                    <td style={{ padding: '0.75rem 1rem', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)' }}>
+                      tool == "{policy.conditions.tool_name}"
+                    </td>
+                    <td style={{ padding: '0.75rem 1rem' }}>
+                      {policy.actions.type === 'block' ? (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'rgba(239,68,68,0.1)', color: '#EF4444', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(239,68,68,0.2)' }}>
+                          <AlertTriangle size={12} /> Block
+                        </span>
+                      ) : (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 999, background: 'rgba(245,158,11,0.1)', color: '#F59E0B', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', border: '1px solid rgba(245,158,11,0.2)' }}>
+                          <ShieldCheck size={12} /> Require Approval
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: '0.75rem 1rem' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#10B981', fontSize: '0.75rem', fontWeight: 600 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B981' }} /> Active
+                      </span>
+                    </td>
+                    <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
+                      <button onClick={() => handleDelete(policy.id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'inline-flex', padding: 4 }}>
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </motion.div>
       )}
 
