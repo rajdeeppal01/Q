@@ -1,6 +1,6 @@
 # Q — Agentic AI Security & Governance Platform
 
-> *"The name's Q. I give the agents their tools... and I make sure they don't misuse them."*
+> *The name's Q. I give the agents their tools... and I make sure they don't misuse them.*
 
 **Q** is the security and governance control plane for autonomous AI agents — the same way Kubernetes governs containers, Q governs AI agents.
 
