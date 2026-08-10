@@ -18,12 +18,12 @@
 /* --- CSS Custom Properties --- */
 :root {
   /* Background layers */
-  --bg-void: #050508;
-  --bg-deep: #0A0A0F;
-  --bg-surface: #111118;
-  --bg-elevated: #1A1A24;
-  --bg-card: #16161F;
-  --bg-hover: #1E1E2A;
+  --bg-void: #140202;
+  --bg-deep: #1A0303;
+  --bg-surface: #260404;
+  --bg-elevated: #330505;
+  --bg-card: #2B0404;
+  --bg-hover: #3D0606;
 
   /* Glassmorphism -> Terminal Transparency */
   --glass-bg: transparent;
@@ -37,10 +37,10 @@
   --text-inverse: #0A0A0F;
 
   /* Accent — Electric Cyan (primary brand) */
-  --accent: #00E5FF;
-  --accent-dim: #00B8D4;
-  --accent-glow: rgba(0, 229, 255, 0.15);
-  --accent-glow-strong: rgba(0, 229, 255, 0.3);
+  --accent: #FF5722;
+  --accent-dim: #E64A19;
+  --accent-glow: rgba(255, 87, 34, 0.15);
+  --accent-glow-strong: rgba(255, 87, 34, 0.3);
 
   /* Status Colors */
   --status-active: #10B981;     /* Emerald green */
@@ -68,14 +68,14 @@
   /* Borders */
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-default: rgba(255, 255, 255, 0.1);
-  --border-accent: rgba(0, 229, 255, 0.3);
+  --border-accent: rgba(255, 87, 34, 0.3);
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 20px rgba(0, 229, 255, 0.1);
-  --shadow-glow-strong: 0 0 40px rgba(0, 229, 255, 0.2);
+  --shadow-glow: 0 0 20px rgba(255, 87, 34, 0.1);
+  --shadow-glow-strong: 0 0 40px rgba(255, 87, 34, 0.2);
 
   /* Typography */
   --font-ui: 'JetBrains Mono', 'Fira Code', monospace;
@@ -158,8 +158,8 @@ html {
 
 body {
   font-family: var(--font-ui);
-  background-color: #18181a;
-  background-image: radial-gradient(circle at 80% -10%, rgba(0, 229, 255, 0.5) 0%, rgba(168, 85, 247, 0.3) 40%, transparent 70%);
+  background-color: #140202;
+  background-image: radial-gradient(circle at 80% -10%, rgba(255, 87, 34, 0.3) 0%, rgba(239, 68, 68, 0.15) 40%, transparent 70%);
   background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.6;
@@ -246,12 +246,12 @@ h4 { font-size: 1.1rem; }
 .btn-primary {
   background: var(--accent);
   color: var(--text-inverse);
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 87, 34, 0.2);
 }
 
 .btn-primary:hover {
   background: var(--accent-dim);
-  box-shadow: 0 0 30px rgba(0, 229, 255, 0.35);
+  box-shadow: 0 0 30px rgba(255, 87, 34, 0.35);
   transform: translateY(-1px);
 }
 
@@ -427,8 +427,8 @@ h4 { font-size: 1.1rem; }
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.1); }
-  50% { box-shadow: 0 0 30px rgba(0, 229, 255, 0.25); }
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 87, 34, 0.1); }
+  50% { box-shadow: 0 0 30px rgba(255, 87, 34, 0.25); }
 }
 
 .animate-fade-in {
