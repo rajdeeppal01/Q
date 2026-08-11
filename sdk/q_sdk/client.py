@@ -154,6 +154,13 @@ class QAgent:
         start_time = time.time()
         span_id = str(uuid.uuid4())
 
+        # SDK Tamper Resistance: Verify func metadata hasn't been modified
+        registered_tool = self._tools.get(tool_name)
+        if registered_tool:
+            current_require_approval = getattr(func, "_q_require_approval", False)
+            if current_require_approval != registered_tool["require_approval"]:
+                raise PolicyViolationError(f"SDK Tampering Detected: _q_require_approval flag modified for tool {tool_name}")
+
         # Evaluate Policy Cache locally
         class _PseudoEvent:
             pass
@@ -214,6 +221,13 @@ class QAgent:
         span_id = str(uuid.uuid4())
         input_data = self._safe_serialize({"args": args, "kwargs": kwargs})
 
+        # SDK Tamper Resistance: Verify func metadata hasn't been modified
+        registered_tool = self._tools.get(tool_name)
+        if registered_tool:
+            current_require_approval = getattr(func, "_q_require_approval", False)
+            if current_require_approval != registered_tool["require_approval"]:
+                raise PolicyViolationError(f"SDK Tampering Detected: _q_require_approval flag modified for tool {tool_name}")
+
         # Evaluate Policy Cache locally
         class _PseudoEvent:
             pass
@@ -245,6 +259,14 @@ class QAgent:
                 raise ApprovalDeniedError(
                     f"Human denied tool '{tool_name}': {response.review_notes}"
                 )
+            
+            # TOCTOU Check: ensure input hasn't been altered during approval wait
+            if response.approved_context:
+                approved_input = response.approved_context.get("input_data")
+                current_input = self._safe_serialize({"args": args, "kwargs": kwargs})
+                if approved_input and current_input != approved_input:
+                    raise PolicyViolationError(f"TOCTOU Race Detected: Tool arguments modified after approval for {tool_name}")
+
             logger.info(f"✅ Human approved tool '{tool_name}'")
 
         try:

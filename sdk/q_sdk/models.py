@@ -54,6 +54,7 @@ class ApprovalResponse(BaseModel):
     approved: bool
     review_notes: Optional[str] = None
     reviewed_by: Optional[str] = None
+    approved_context: Optional[Dict[str, Any]] = None
 
 
 class AgentRegistration(BaseModel):

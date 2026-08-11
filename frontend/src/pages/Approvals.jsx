@@ -157,14 +157,44 @@ function ApprovalCard({ approval, onReview }) {
             <AnimatePresence>
               {showContext && (
                 <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} style={{ overflow: 'hidden' }}>
-                  <pre style={{
-                    marginTop: 8, background: 'var(--bg-deep)', border: '1px solid var(--border-subtle)',
-                    borderRadius: 8, padding: '0.75rem', fontSize: '0.72rem', color: 'var(--accent)',
-                    fontFamily: 'var(--font-mono)', whiteSpace: 'pre-wrap', wordBreak: 'break-all',
-                    maxHeight: 220, overflow: 'auto',
+                  <div style={{
+                    marginTop: 8,
+                    padding: '0.75rem',
+                    background: 'var(--bg-deep)',
+                    border: '1px solid #EF4444',
+                    borderLeft: '4px solid #EF4444',
+                    borderRadius: 8,
+                    position: 'relative'
                   }}>
-                    {JSON.stringify(approval.context, null, 2)}
-                  </pre>
+                    <div style={{
+                      position: 'absolute',
+                      top: 0, left: 0, right: 0,
+                      background: 'repeating-linear-gradient(45deg, #EF4444, #EF4444 10px, transparent 10px, transparent 20px)',
+                      height: '4px',
+                      opacity: 0.2
+                    }} />
+                    <div style={{
+                      fontSize: '0.65rem',
+                      color: '#EF4444',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      marginBottom: '0.5rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4
+                    }}>
+                      <span>⚠</span> AGENT-PROVIDED DATA — DO NOT TRUST
+                    </div>
+                    <pre style={{
+                      margin: 0,
+                      fontSize: '0.72rem', color: 'var(--accent)',
+                      fontFamily: 'var(--font-mono)', whiteSpace: 'pre-wrap', wordBreak: 'break-all',
+                      maxHeight: 220, overflow: 'auto',
+                    }}>
+                      {JSON.stringify(approval.context, null, 2)}
+                    </pre>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

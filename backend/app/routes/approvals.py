@@ -5,7 +5,7 @@ Manage human-in-the-loop approval workflows for governed AI agents.
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import List, Optional, Any
 import asyncio
 from datetime import datetime, timezone, timedelta
@@ -54,6 +54,16 @@ async def request_approval(
     db: Session = Depends(get_db)
 ):
     """SDK calls this to request permission before executing a high-risk tool."""
+    # State Exhaustion Protection
+    pending_count = db.execute(
+        select(func.count()).where(
+            ApprovalRequest.agent_id == req.agent_id,
+            ApprovalRequest.status == "pending"
+        )
+    ).scalar()
+    if pending_count >= 5:
+        raise HTTPException(status_code=429, detail="Too many pending approvals for this agent")
+
     # Note: In prod, auth the agent
     approval = ApprovalRequest(
         agent_id=req.agent_id,
@@ -97,7 +107,8 @@ async def request_approval(
     return {
         "approved": approval.status == "approved",
         "review_notes": approval.review_notes,
-        "reviewed_by": approval.reviewed_by
+        "reviewed_by": approval.reviewed_by,
+        "approved_context": approval.context if approval.status == "approved" else None
     }
 
 @router.get("/{approval_id}/status")
