@@ -73,6 +73,26 @@ class TelemetryClient:
             logger.error(f"Failed to emit event: {e}")
             return False
 
+    def request_approval_sync(self, payload: ApprovalRequestPayload) -> ApprovalResponse:
+        """Send an approval request synchronously and wait for human response."""
+        try:
+            response = self._client.post(
+                "/approvals/request",
+                json=payload.model_dump(mode="json"),
+                timeout=payload.timeout_seconds + 5,
+            )
+            if response.status_code == 200:
+                return ApprovalResponse(**response.json())
+            else:
+                logger.warning(f"Approval request failed: {response.status_code}")
+                return ApprovalResponse(approved=False, review_notes="Request failed")
+        except httpx.TimeoutException:
+            logger.warning("Approval request timed out — auto-denied")
+            return ApprovalResponse(approved=False, review_notes="Timeout — auto-denied")
+        except Exception as e:
+            logger.error(f"Approval request error: {e}")
+            return ApprovalResponse(approved=False, review_notes=f"Error: {str(e)}")
+
     async def request_approval(self, payload: ApprovalRequestPayload) -> ApprovalResponse:
         """Send an approval request and wait for human response."""
         try:

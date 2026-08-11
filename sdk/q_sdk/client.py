@@ -79,6 +79,12 @@ class QAgent:
         })
         if result.get("id"):
             self.agent_id = result["id"]
+            if result.get("api_key"):
+                self.api_key = result["api_key"]
+                self._telemetry.api_key = result["api_key"]
+                self._telemetry._client.headers["X-Q-API-Key"] = result["api_key"]
+                if self._telemetry._async_client:
+                    self._telemetry._async_client.headers["X-Q-API-Key"] = result["api_key"]
             logger.info(f"✅ Agent '{self.name}' registered with Q (ID: {self.agent_id})")
             
             # Fetch active policies for this agent
@@ -175,6 +181,35 @@ class QAgent:
 
         # Serialize inputs safely
         input_data = self._safe_serialize({"args": args, "kwargs": kwargs})
+
+        # HITL Gate: request approval if required
+        if require_approval and self.agent_id:
+            approval_payload = ApprovalRequestPayload(
+                agent_id=self.agent_id,
+                action_description=f"Tool call: {tool_name}",
+                reason=approval_reason,
+                context={
+                    "tool_name": tool_name,
+                    "input_data": input_data,
+                    "risk_level": risk_level,
+                    "data_classification": data_classification,
+                },
+                timeout_seconds=approval_timeout,
+            )
+            response = self._telemetry.request_approval_sync(approval_payload)
+            if not response.approved:
+                raise ApprovalDeniedError(
+                    f"Human denied tool '{tool_name}': {response.review_notes}"
+                )
+            
+            # TOCTOU Check: ensure input hasn't been altered during approval wait
+            if response.approved_context:
+                approved_input = response.approved_context.get("input_data")
+                current_input = self._safe_serialize({"args": args, "kwargs": kwargs})
+                if approved_input and current_input != approved_input:
+                    raise PolicyViolationError(f"TOCTOU Race Detected: Tool arguments modified after approval for {tool_name}")
+
+            logger.info(f"✅ Human approved tool '{tool_name}'")
 
         try:
             # Execute the tool
