@@ -163,7 +163,7 @@ class QAgent:
         # SDK Tamper Resistance: Verify func metadata hasn't been modified
         registered_tool = self._tools.get(tool_name)
         if registered_tool:
-            current_require_approval = getattr(func, "_q_require_approval", False)
+            current_require_approval = getattr(func, "_q_require_approval", registered_tool["require_approval"])
             if current_require_approval != registered_tool["require_approval"]:
                 raise PolicyViolationError(f"SDK Tampering Detected: _q_require_approval flag modified for tool {tool_name}")
 
@@ -259,7 +259,7 @@ class QAgent:
         # SDK Tamper Resistance: Verify func metadata hasn't been modified
         registered_tool = self._tools.get(tool_name)
         if registered_tool:
-            current_require_approval = getattr(func, "_q_require_approval", False)
+            current_require_approval = getattr(func, "_q_require_approval", registered_tool["require_approval"])
             if current_require_approval != registered_tool["require_approval"]:
                 raise PolicyViolationError(f"SDK Tampering Detected: _q_require_approval flag modified for tool {tool_name}")
 
