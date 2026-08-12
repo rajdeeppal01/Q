@@ -70,7 +70,17 @@ app.add_middleware(
 # Rate Limiting
 app.state.limiter = limiter
 from slowapi import _rate_limit_exceeded_handler
+from sqlalchemy.exc import TimeoutError as SQLAlchemyTimeoutError
+
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+@app.exception_handler(SQLAlchemyTimeoutError)
+async def db_timeout_exception_handler(request, exc):
+    logger.error(f"Database Pool Exhausted: {exc}")
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Too Many Requests (Database Busy)"}
+    )
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
