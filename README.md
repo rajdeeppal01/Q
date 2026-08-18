@@ -4,7 +4,7 @@
 
 **Q** is the security and governance control plane for autonomous AI agents — the same way Kubernetes governs containers, Q governs AI agents.
 
-![Status](https://img.shields.io/badge/Status-In_Development-blue) ![Python](https://img.shields.io/badge/Python-3.11+-3776AB) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688) ![React](https://img.shields.io/badge/React-19-61dafb) ![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Production_Ready-success) ![Python](https://img.shields.io/badge/Python-3.11+-3776AB) ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688) ![React](https://img.shields.io/badge/React-19-61dafb) ![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
@@ -18,53 +18,74 @@ Every enterprise is deploying autonomous AI agents. But:
 
 ## The Solution
 
-Q provides end-to-end security governance for AI agents:
+Q provides end-to-end security governance for AI agents with enterprise-grade protections built-in:
 
 | Feature | What It Does |
 |---|---|
-| **Agent Registry** | Discovers and inventories all AI agents in an environment |
-| **Non-Human IAM** | Manages agent identities with scoped permissions and credential rotation |
-| **Real-Time Monitoring** | Tracks every tool call, LLM invocation, and data access in real-time |
-| **Policy Engine** | Enforces governance rules with human-in-the-loop approval gates |
-| **Anomaly Detection** | Detects rogue behavior, privilege escalation, and goal hijacking |
-| **Audit Trails** | Full traceability of agent reasoning and actions |
-| **Compliance** | Maps operations to NIST AI RMF, OWASP Agentic Top 10, ISO 42001 |
+| **Human-In-The-Loop (HITL)** | Pauses agent thread execution for high-risk tools and awaits WebSockets human approval. |
+| **Tamper Resistance** | SDK detects if a rogue agent dynamically deletes security decorators and permanently halts execution. |
+| **TOCTOU Protection** | Cryptographically verifies that the arguments approved by a human were not swapped out by the agent at the last millisecond. |
+| **Circuit Breakers** | Built-in exponential backoff means if the Q control plane is temporarily unavailable, the SDK recovers gracefully without crashing the user's host application. |
+| **State Exhaustion Defense** | Backend database connection pooling (`QueuePool`) blocks DDOS attacks from runaway agents, emitting `429 Too Many Requests`. |
+| **Real-Time Monitoring** | Tracks every tool call, LLM invocation, and data access in real-time. |
+| **Anomaly Detection** | OWASP-based background analysis detects prompt injections, privilege escalation, and goal hijacking. |
 
 ## Architecture
 
+```mermaid
+flowchart TD
+    subgraph Client Environment
+        Agent[User's AI Agent\nLangChain / AutoGen]
+        SDK[Q Python SDK\nInterception Layer]
+        Agent <-->|Function Calls| SDK
+    end
+
+    subgraph Q Cloud Control Plane
+        API[FastAPI Backend\nRender]
+        DB[(PostgreSQL\nNeon)]
+        WS[WebSocket Manager]
+        
+        SDK <-->|REST & WebSockets| API
+        API <--> DB
+        API <--> WS
+    end
+
+    subgraph SecOps Dashboard
+        UI[React Frontend\nVercel]
+        UI <-->|WebSockets| WS
+        UI <-->|REST| API
+    end
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    AI AGENTS (Instrumented)               │
-│   Research Agent  ·  Data Analyst  ·  Code Reviewer      │
-└────────────────────────┬────────────────────────────────┘
-                         │ q-sdk (Python)
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                    Q BACKEND (FastAPI)                     │
-│   Policy Engine · Anomaly Detection · Audit · Compliance  │
-│   WebSocket Gateway · Agent IAM · Report Generator        │
-└────────────────────────┬────────────────────────────────┘
-                         │ REST + WebSocket
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                 Q DASHBOARD (React + Vite)                 │
-│   Mission Control · Live Monitor · Compliance Radar       │
-│   HITL Approvals · Agent Registry · Audit Timeline        │
-└─────────────────────────────────────────────────────────┘
+
+## Quick Start (Investor Demo via Colab)
+
+Want to see Q in action without installing anything?
+1. Open the [Q Dashboard](https://q-vert-eight.vercel.app/) and navigate to the **HITL Gateway**.
+2. Open a new [Google Colab Notebook](https://colab.research.google.com/) and paste this:
+```python
+!pip install -q git+https://github.com/rajdeeppal01/Q.git#subdirectory=sdk
+
+from q_sdk import QAgent
+import time
+
+# Connect to the live Q Control Plane
+agent = QAgent(
+    name="my-first-agent", 
+    api_key="q_sk_demo_key_123"
+)
+
+@agent.tool(risk_level="high", require_approval=True)
+def transfer_funds(user_id, amount):
+    time.sleep(1)
+    return f"Transferred ${amount} to {user_id}"
+    
+print("Agent executing...")
+# The SDK will freeze execution here until you click 'Approve' on the dashboard!
+result = transfer_funds("usr_999", 5000)
+print(f"Result: {result}")
 ```
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **SDK** | Python (framework-agnostic) |
-| **Backend** | FastAPI, SQLAlchemy, PostgreSQL (Neon) |
-| **Frontend** | React 19, Vite, Framer Motion, Recharts |
-| **AI** | Google Gemini (anomaly analysis, report generation) |
-| **Auth** | JWT (humans) + API Keys (agents) |
-| **Compliance** | NIST AI RMF, OWASP Agentic Top 10, ISO 42001 |
-
-## Quick Start
+## Local Development
 
 ### Backend
 ```bash
@@ -86,21 +107,6 @@ npm run dev
 ### SDK
 ```bash
 pip install -e ./sdk
-```
-
-### Instrument Your Agent
-```python
-from q_sdk import QAgent
-
-agent = QAgent(
-    name="my-agent",
-    q_url="http://localhost:8000",
-    api_key="q_sk_..."
-)
-
-@agent.tool(risk_level="high", require_approval=True)
-def access_database(query: str) -> dict:
-    return db.execute(query)
 ```
 
 ## Compliance Framework Mappings
